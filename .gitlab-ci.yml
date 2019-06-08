@@ -1,6 +1,0 @@
-pages:
-  script:
-    - echo 'nothing'
-  artifacts:
-    paths:
-    - .
