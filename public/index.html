@@ -137,7 +137,7 @@
         </td>
         <td>
           <div class="ui verysmall input" :class="{'error': errorPrice}">
-            <input @change="calculate" type="text" v-model="price"></input>
+            <input @change="calculateByPrice" type="text" v-model="price"></input>
           </div>
         </td>
         <td>
@@ -156,7 +156,12 @@
         <td class="right aligned">{{ phase.marginJE | percentage }}</td>
 				<td class="right aligned">{{ phase.pay | euro }}</td>
         <td class="right aligned">{{ phase.urssafConsultant | euro }}</td>
-        <td class="right aligned">{{ phase.netConsultant | euro }}</td>
+        <!-- <td class="right aligned">{{ phase.netConsultant | euro }}</td> -->
+				<td>
+					<div class="ui verysmall input">
+						<input @change="calculateByPrice" type="text" v-model="netConsultant"></input>
+					</div>
+				</td>
         <td class="right aligned">{{ phase.netByConsultant | euro }}</td>
 				<td @click="deletePhaseEvent"><i class="icon close"></i></td>
 			</tr>
@@ -193,8 +198,8 @@
 				},
 		};
 
-		Vue.filter('euro', (val) => {return val + ' €';});
 		Vue.filter('euro', function(val) {
+			if(val === undefined) return '';
 			let strVal = val.toString();
 			let int, dec;
 			if (strVal.includes('.')) {
@@ -231,27 +236,114 @@
 						price: 0, // variable (v-model)
 						margin: 0, // variable (v-model)
 						nbConsultant: 0, // variable (v-model)
+						netConsultant: 0, // variable (v-model)
 						deleted: false, // true when the phase is deleting
           };
         },
 				// watch on the 3 inputs
         watch: {
           price: function() {
-            this.phase.price = this.toInt(this.price);
-						this.price = this.phase.price
+						let price = this.toInt(this.price);
+						if (price !== '') {
+							this.calculateByPrice();
+							this.phase.price = price;
+							this.price = price
+						}
           },
           nbConsultant: function() {
-            this.phase.nbConsultant = this.toInt(this.nbConsultant);
-						this.nbConsultant = this.phase.nbConsultant;
+						let nbConsultant = this.toInt(this.nbConsultant);
+						if (nbConsultant !== '') {
+							this.calculateByPrice();
+							this.phase.nbConsultant = nbConsultant;
+							this.nbConsultant = nbConsultant
+						}
           },
           margin: function() {
-            this.phase.margin = this.toInt(this.margin);
-						this.margin = this.phase.margin;
+						let margin = this.toInt(this.margin);
+						if (margin !== '') {
+							this.calculateByPrice();
+							this.phase.margin = margin;
+							this.margin = margin
+						}
           },
+					netConsultant: function() {
+						let netConsultant = this.toInt(this.netConsultant);
+						if (netConsultant !== '') {
+							this.calculateByPay();
+							this.phase.netConsultant = netConsultant;
+							this.netConsultant = netConsultant
+						}
+					},
         },
         methods: {
-          calculate: function() {
-						console.log(this.$parent);
+					r: (n) => +(Math.round(n + "e+2")  + "e-2"),
+					calculateByPay: function() {
+						console.log('calculateByPay');
+
+						this.phase.netByConsultant = this.r(this.phase.netConsultant / this.phase.nbConsultant);
+						console.log(this.phase.netConsultant / this.phase.nbConsultant);
+						console.log(this.r(this.phase.netConsultant / this.phase.nbConsultant));
+						//
+						// // optimize : maximize the jeh to 400 €
+						// if (this.phase.jeh < this.phase.price) {
+						// 	if (this.phase.price >= 400) {
+						// 		this.phase.jeh = 400;
+						// 	}
+						// 	else {
+						// 		this.phase.jeh = this.phase.price;
+						// 	}
+						// }
+						//
+						// // compute data
+						// this.phase.nbJeh = this.phase.price / this.phase.jeh;
+            // this.phase.pay = +(Math.round(this.phase.price - (this.phase.price * this.phase.margin / 100) + "e+2")  + "e-2");
+            // this.phase.urssafJE = +(Math.round(this.phase.nbJeh * this.contributions.urssafBase * this.contributions.jeContrib +
+            //   this.phase.pay * this.contributions.jepay + "e+2")  + "e-2");
+            // this.phase.marginJE = +(Math.round((this.phase.price - this.phase.pay - this.phase.urssafJE) / this.phase.price * 100 + "e+2")  + "e-2");
+            // this.phase.urssafConsultant = +(Math.round(this.phase.nbJeh * this.contributions.urssafBase * this.contributions.ConsultantContrib +
+            //   this.phase.pay * this.contributions.ConsultantPay + "e+2")  + "e-2");
+            // this.phase.pcConsultant = +(Math.round(this.phase.netByConsultant / this.phase.price * 100 + "e+2")  + "e-2");
+						//
+						// // optimize : if the number of JEH is not integer,
+						// // then we need to increase the number of JEH and drecrease the amount of each JEH.
+            // if (!Number.isInteger(this.phase.nbJeh)) {
+						// 	this.phase.nbJeh = Math.floor(this.phase.nbJeh) + 1;
+						// 	this.phase.jeh = this.phase.price / this.phase.nbJeh;
+            // }
+						//
+						// this.netConsultant = this.phase.netConsultant;
+						//
+						// // error handling
+						// if (this.phase.jeh < 80) {
+						// 	this.phase.jeh = 80;
+						// }
+						// if (this.phase.price < 80) {
+						// 	this.errorPrice = 'Prix inférieur à 80 €';
+						// 	this.errorJeh = '';
+						// 	this.warningMessage = '';
+						// }
+						// else {
+						// 	this.errorPrice = '';
+						// 	if (this.phase.nbConsultant > this.phase.nbJeh) {
+						// 		this.errorJeh = 'Pas assez de JEH pour les intervenants.';
+						// 	}
+						// 	else {
+						// 		this.errorJeh = '';
+						// 		if (!Number.isInteger(this.phase.nbJeh / this.phase.nbConsultant)) {
+						// 			this.warningMessage =  'Les JEH ne sont pas réparties équitablement entre les intervenants.';
+						// 		}
+						// 		else {
+						// 			this.warningMessage = '';
+						// 		}
+						// 	}
+						// }
+						//
+						// // save signal
+						// this.$emit('save', this.phase); // send the modified phase to the parent for totals and averages
+					},
+          calculateByPrice: function() {
+						// console.log(this.$parent);
+						console.log('calculate');
 
 
 						// optimize : maximize the jeh to 400 €
@@ -282,6 +374,8 @@
 							this.phase.nbJeh = Math.floor(this.phase.nbJeh) + 1;
 							this.phase.jeh = this.phase.price / this.phase.nbJeh;
             }
+
+						this.netConsultant = this.phase.netConsultant;
 
 						// error handling
 						if (this.phase.jeh < 80) {
@@ -322,15 +416,12 @@
             this.phase.pcConsultant = '';
           },
           toInt: function(strnb) { // convert to integer and if possible then call calculate, otherwise call reset
-            let price = parseInt(strnb);
-            if (!isNaN(price)) {
-              this.calculate();
+            let nb = parseInt(strnb);
+            if (isNaN(nb)) {
+							nb = '';
+							this.reset();
             }
-            else {
-              price = '';
-              this.reset();
-            }
-            return price
+						return nb
 					},
 					deletePhaseEvent: function() {
 						this.deleted = true;
@@ -344,12 +435,12 @@
         },
 				created: function () {
 					this.updateProps();
-					this.calculate();
+					this.calculateByPrice();
 				},
 				updated: function () {
 					this.updateProps();
 					if (this.deleted) { // calculate only when the phase has been deleted, otherwise infinite loop on calculate
-						this.calculate();
+						this.calculateByPrice();
 						this.deleted = false;
 					}
 				},
