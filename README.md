@@ -41,4 +41,5 @@ https://stackoverflow.com/a/47005707
  - Optimize by pay
  - Consultant feature: attribute each JEH to consultant, add consultant
  - Use Vuex: contribution rates, phases
+ - Save in database
  - Optimize between phases
