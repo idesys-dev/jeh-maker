@@ -7,12 +7,11 @@ const maxJeh: number = 400
 function optimize (phase:PhaseObject) {
   console.log('optimize', phase.pay, phase.price)
   // optimize : maximize the jeh to 400 €
-  if (phase.jeh < phase.price || true) {
-    if (phase.price >= 400) {
-      phase.jeh = 400
-    } else {
-      phase.jeh = phase.price
-    }
+  // if (phase.jeh < phase.price || true) {
+  if (phase.price >= 400) {
+    phase.jeh = 400
+  } else {
+    phase.jeh = phase.price
   }
 
   phase.nbJeh = phase.price / phase.jeh
@@ -48,36 +47,3 @@ export function optimizeByPay (phase: PhaseObject) {
   phase.price = round(phase.pay / (1 - phase.margin / 100))
   return optimize(phase)
 }
-
-// export function optimizeByPay (phase: PhaseObject) {
-//   let n: number = 0
-//   let currentMargin: number = 0.15
-//   do {
-//     phase.price = round(phase.pay * (1 + currentMargin))
-//     phase.nbJeh = phase.nbConsultant
-//     do {
-//       phase.jeh = phase.price / phase.nbJeh
-//       phase.nbJeh += phase.nbConsultant
-//     } while (phase.jeh <= maxJeh)
-//     phase.nbJeh -= phase.nbConsultant
-//     phase.urssafJE = round(phase.nbJeh * contributionRates.urssafBase * contributionRates.jeContrib +
-//       phase.pay * contributionRates.jepay)
-//     phase.marginJE = round((phase.price - phase.pay - phase.urssafJE) / phase.price * 100)
-//     currentMargin += 0.001
-//     // console.log('again 1', phase.marginJE, phase.margin - 5)
-//     if (n > 50000) {
-//       console.log('abort', n)
-//       return phase
-//     }
-//     n += 1
-//   } while (phase.marginJE < phase.margin - 5)
-//
-//   phase.urssafConsultant = round(phase.nbJeh * contributionRates.urssafBase * contributionRates.ConsultantContrib +
-//     phase.pay * contributionRates.ConsultantPay)
-//   phase.netConsultant = round(phase.pay - phase.urssafConsultant)
-//   phase.netByConsultant = round(phase.netConsultant / phase.nbConsultant)
-//   phase.pcConsultant = round(phase.netByConsultant / phase.price * 100)
-//
-//   console.log(phase.jeh)
-//   return phase
-// }
