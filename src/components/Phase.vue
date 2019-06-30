@@ -80,34 +80,40 @@ export default class Phase extends Vue {
 
   // Watchers
   @Watch('price')
-  Watchprice () {
+  Watchprice (price_) {
+    console.log('Phase watch price', this.price, price_)
     let price = this.toInt(this.price)
+    console.log(price)
     if (!isNaN(price)) {
-      this.calculateByPrice()
       this.phase.price = price
+      this.calculateByPrice()
       this.price = price.toString()
     }
   }
   @Watch('nbConsultant')
   WatchnbConsultant () {
+    console.log('Phase watch nbConsultant', this.nbConsultant)
     let nbConsultant = this.toInt(this.nbConsultant)
     if (!isNaN(nbConsultant)) {
-      this.calculateByPrice()
       this.phase.nbConsultant = nbConsultant
+      this.calculateByPrice()
       this.nbConsultant = nbConsultant.toString()
     }
   }
   @Watch('margin')
   Watchmargin () {
+    console.log('Phase watch margin', this.margin)
     let margin = this.toInt(this.margin)
     if (!isNaN(margin)) {
-      this.calculateByPrice()
       this.phase.margin = margin
+      this.calculateByPrice()
       this.margin = margin.toString()
     }
   }
+  /*
   @Watch('netConsultant')
   WatchnetConsultant () {
+    console.log('Phase watch netConsultant', this.netConsultant)
     let netConsultant = this.toInt(this.netConsultant)
     if (!isNaN(netConsultant)) {
       this.calculateByPay()
@@ -115,6 +121,7 @@ export default class Phase extends Vue {
       this.netConsultant = netConsultant.toString()
     }
   }
+  */
 
   // Methods
 
@@ -183,7 +190,7 @@ export default class Phase extends Vue {
   }
   calculateByPrice () {
     // console.log(this.$parent);
-    console.log('calculate')
+    console.log('calculateByPrice', this.phase.price, this.price)
 
     // optimize : maximize the jeh to 400 €
     if (this.phase.jeh < this.phase.price) {
@@ -213,6 +220,7 @@ export default class Phase extends Vue {
       this.phase.jeh = this.phase.price / this.phase.nbJeh
     }
 
+    console.log('this.netConsultant', this.netConsultant)
     this.netConsultant = this.phase.netConsultant.toString()
 
     // error handling
