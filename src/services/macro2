@@ -1,0 +1,131 @@
+Rem Attribute VBA_ModuleType=VBAModule
+Option VBASupport 1
+
+'Ce programme permet de generer de maniere automatique le budget d'une etude a partir des informations renseignees par le chef de projet
+Sub MyJEHMaker2()
+
+'Permet d'avertir les chefs de projet, et donc le president et le tresorier le 1er Janvier de chaque annee que les taux de cotisations
+'Ont peut etre changer et qu'il faut les mettre a jour
+
+Dim myyear As Integer
+
+    myyear = Year(Feuille3.Range("H3"))
+
+    For i = 16 To 26
+        If Feuille3.Cells(i, 6) = myyear Then
+            If IsEmpty(Feuille3.Cells(i, 7)) Then
+                MsgBox ("ATTENTION, VERIFIEZ QUE LES TAUX DE COTISATIONS SONT A JOUR")
+            End If
+        End If
+    Next
+
+    If IsEmpty(Feuille1.Range("B4")) Then
+        MsgBox ("Attention, lorsqu'il vous sera demande de renseigner la marge nette ciblee sur la phase, le separateur decimal doit etre un point et non une virgule" & Chr(10) & "" & Chr(10) & "Ex : 45% = 0.45")
+    End If
+
+'Phase 1 : Permet de renseigner le numero de la phase, son objet, le nombre de participants, la remuneration, et la marge nette ciblee
+'Cette phase permet aussi de reporter certaines informations renseignees sur les autres feuilles (Feuille2 et Feuille5)
+    Dim mystep As Integer
+    Dim mystep2 As Integer
+    Dim mysalary As Variant
+    Dim mymargin As Variant
+    Dim target As Variant
+    Dim mystudent As Integer
+
+    mystep = InputBox("Numero de phase?")
+    mystep2 = mystep + 3
+
+    If Not Cells(mystep2, 2) <> "" Then
+        Feuille1.Cells(mystep2, 2) = InputBox("Objet de la phase?")
+        Feuille2.Cells(mystep2 - 1, 2) = Feuille1.Cells(mystep2, 2)
+
+    ElseIf MsgBox("Modifier l'objet de la phase ?", vbYesNo + vbQuestion) = vbYes Then
+        Feuille1.Cells(mystep2, 2) = InputBox("Objet de la phase?")
+        Feuille2.Cells(mystep2 - 1, 2) = Feuille1.Cells(mystep2, 2)
+
+    End If
+
+    For myclear = 3 To 9
+        Feuille1.Cells(mystep2, myclear).ClearContents
+    Next
+
+    mystudent = InputBox("Nombre d'intervenants sur phase?")
+        Feuille1.Cells(mystep2, 4) = mystudent
+        Feuille2.Cells(mystep2 - 1, 4) = Feuille1.Cells(mystep2, 4)
+
+        mysalary = InputBox("Remuneration etudiante TOTALE de la phase?")
+        Feuille1.Cells(mystep2, 5) = mysalary
+        Feuille2.Cells(mystep2 - 1, 5) = Feuille1.Cells(mystep2, 5)
+
+        target = InputBox("marge operationnelle ciblee sur phase?")
+        Feuille1.Cells(mystep2, 9) = target
+        If Not target = 0 Then
+        Feuille2.Cells(mystep2 - 1, 9) = Feuille1.Cells(mystep2, 9)
+    End If
+
+'Fin de la Phase 1
+
+'Phase 2 : le programme genere une boucle dans une autre boucle. Les boucles s'arretent lorsque la marge ciblee depasse la marge calculee
+'A l'aide des formules Excel directement sur la feuille
+    mymargin = 0.15
+    Dim myglobalmargin As Variant
+    Dim nbJEH As Integer
+    Dim JEH As Variant
+
+    If mysalary = 0 Then
+        Feuille1.Cells(mystep2, 7) = "OFFERT"
+
+    Else
+
+        Do
+            Feuille1.Cells(mystep2, 7) = Round(Cells(mystep2, 5) * (1 + mymargin))
+            nbJEH = mystudent
+
+            Do
+                JEH = (Feuille1.Cells(mystep2, 7) / nbJEH)
+                nbJEH = nbJEH + mystudent
+
+            Loop Until JEH <= Feuille3.Range("G12")
+
+            Feuille1.Cells(mystep2, 8) = JEH
+            Feuille1.Cells(mystep2, 3) = nbJEH - mystudent
+
+            Feuille1.Cells(mystep2, 6) = mysalary / Feuille1.Cells(mystep2, 3)
+
+            myglobalmargin = Feuille1.Cells(mystep2, 12)
+            mymargin = mymargin + 0.001
+
+        Loop Until myglobalmargin >= Feuille1.Cells(mystep2, 9).Value
+
+    End If
+
+    If target = 0 Then Cells(mystep2, 9).ClearContents
+
+    If target <> 0 Then
+        Cells(mystep2, 6) = Int(mysalary / Cells(mystep2, 3))
+        Cells(mystep2, 5) = Cells(mystep2, 6) * Cells(mystep2, 3)
+
+        If Feuille1.Cells(mystep2, 8) < Feuille3.Range("F12") Then
+            MsgBox ("ATTENTION, la remuneration etudiante et la marge renseignee pour cette phase ne permettent pas d'obtenir un JEH unitaire facture superieur au prix plancher du JEH facture" & Chr(10) & "" & Chr(10) & "Augmenter la remuneration etuidante ou augmenter la marge pour rentrer dans la tranche du prix du JEH facture")
+        End If
+    End If
+
+    For mycopy = 1 To 12
+        Feuille2.Cells(mycopy + 2, 3) = Feuille1.Cells(mycopy + 3, 3)
+    Next
+
+
+End Sub
+
+
+'Programme qui permet de reset le budget automatique, le budget manuel et les variables de la feuille ETUDE ET PHASAGE
+Sub MyJEHMakerCleaning()
+
+    If MsgBox("Etes-vous sur de vouloir reinitialiser le budget ?", vbYesNo + vbQuestion) = vbYes Then
+
+        Feuille1.Range("B4:I15, G17:G19").ClearContents
+        Feuille2.Range("B3:E14, I3:I14, G16:G18").ClearContents
+
+    End If
+
+End Sub

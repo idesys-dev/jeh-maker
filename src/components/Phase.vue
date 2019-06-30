@@ -13,7 +13,12 @@
     </td>
     <td>
       <div class="ui verysmall input" :class="{'error': errorPrice}">
-        <input @change="calculateByPrice" type="text" v-model="price" />
+        <input
+        type="text"
+        v-model="price"
+        @change="calculateByPrice"
+        @focus="mode = 'price'"
+        />
       </div>
     </td>
     <td>
@@ -30,14 +35,29 @@
     <td class="right aligned" :class="{'error': errorJeh}">{{ phase.nbJeh }}</td>
     <td class="right aligned">{{ phase.urssafJE | euro }}</td>
     <td class="right aligned">{{ phase.marginJE | percentage }}</td>
-    <td class="right aligned">{{ phase.pay | euro }}</td>
-    <td class="right aligned">{{ phase.urssafConsultant | euro }}</td>
-    <!-- <td class="right aligned">{{ phase.netConsultant | euro }}</td> -->
+    <!-- <td class="right aligned">{{ phase.pay | euro }}</td> -->
     <td>
       <div class="ui verysmall input">
-        <input @change="calculateByPrice" type="text" v-model="netConsultant" />
+        <input
+        type="text"
+        v-model="pay"
+        @change="calculateByPay"
+        @focus="mode = 'pay'"
+        />
       </div>
     </td>
+    <td class="right aligned">{{ phase.urssafConsultant | euro }}</td>
+    <td class="right aligned">{{ phase.netConsultant | euro }}</td>
+    <!-- <td>
+      <div class="ui verysmall input">
+        <input
+        type="text"
+        v-model="netConsultant"
+        @change="calculateByPay"
+        @focus="mode = 'pay'"
+        />
+      </div>
+    </td> -->
     <td class="right aligned">{{ phase.netByConsultant | euro }}</td>
     <td @click="deletePhaseEvent"><i class="icon close"></i></td>
   </tr>
@@ -62,8 +82,10 @@ export default class Phase extends Vue {
   price: string = '0' // variable (v-model)
   margin: string = '0' // variable (v-model)
   nbConsultant: string = '0' // variable (v-model)
-  netConsultant: string = '0' // variable (v-model)
+  pay: string = '0' // variable (v-model)
+  // netConsultant: string = '0' // variable (v-model)
   deleted: boolean = false // true when the phase is deleting
+  mode: string = 'price' // 'price' or 'pay' (avoid infinite loop cause by watch and calculations)
 
   // Lifecycle hood
   created () {
@@ -81,7 +103,10 @@ export default class Phase extends Vue {
   // Watchers
   @Watch('price')
   Watchprice () {
-    console.log('Phase watch price', this.price)
+    console.log('Phase watch price', this.price, this.mode)
+    if (this.mode === 'pay') {
+      return
+    }
     let price = this.toInt(this.price)
     if (!isNaN(price)) {
       this.phase.price = price
@@ -89,44 +114,57 @@ export default class Phase extends Vue {
       this.price = price.toString()
     }
   }
-  @Watch('nbConsultant')
-  WatchnbConsultant () {
-    console.log('Phase watch nbConsultant', this.nbConsultant)
-    let nbConsultant = this.toInt(this.nbConsultant)
-    if (!isNaN(nbConsultant)) {
-      this.phase.nbConsultant = nbConsultant
-      this.calculateByPrice()
-      this.nbConsultant = nbConsultant.toString()
-    }
-  }
-  @Watch('margin')
-  Watchmargin () {
-    console.log('Phase watch margin', this.margin)
-    let margin = this.toInt(this.margin)
-    if (!isNaN(margin)) {
-      this.phase.margin = margin
-      this.calculateByPrice()
-      this.margin = margin.toString()
-    }
-  }
-  /*
-  @Watch('netConsultant')
+  @Watch('pay')
   WatchnetConsultant () {
-    console.log('Phase watch netConsultant', this.netConsultant)
-    let netConsultant = this.toInt(this.netConsultant)
-    if (!isNaN(netConsultant)) {
+    console.log('Phase watch pay', this.pay, this.mode)
+    if (this.mode === 'price') {
+      return
+    }
+    let pay = this.toInt(this.pay)
+    if (!isNaN(pay)) {
+      this.phase.pay = pay
       this.calculateByPay()
-      this.phase.netConsultant = netConsultant
-      this.netConsultant = netConsultant.toString()
+      this.pay = pay.toString()
     }
   }
-  */
+  // @Watch('nbConsultant')
+  // WatchnbConsultant () {
+  //   console.log('Phase watch nbConsultant', this.nbConsultant, this.mode)
+  //   let nbConsultant = this.toInt(this.nbConsultant)
+  //   if (!isNaN(nbConsultant)) {
+  //     this.phase.nbConsultant = nbConsultant
+  //     this.calculateByPrice()
+  //     this.nbConsultant = nbConsultant.toString()
+  //   }
+  // }
+  // @Watch('margin')
+  // Watchmargin () {
+  //   console.log('Phase watch margin', this.margin, this.mode)
+  //   let margin = this.toInt(this.margin)
+  //   if (!isNaN(margin)) {
+  //     this.phase.margin = margin
+  //     this.calculateByPrice()
+  //     this.margin = margin.toString()
+  //   }
+  // }
+  // @Watch('netConsultant')
+  // WatchnetConsultant () {
+  //   console.log('Phase watch netConsultant', this.netConsultant, this.mode)
+  //   if (this.mode === 'price') {
+  //     return
+  //   }
+  //   let netConsultant = this.toInt(this.netConsultant)
+  //   if (!isNaN(netConsultant)) {
+  //     this.phase.netConsultant = netConsultant
+  //     this.calculateByPay()
+  //     this.netConsultant = netConsultant.toString()
+  //   }
+  // }
 
   // Methods
 
   calculateByPay () {
-    console.log('calculateByPay')
-    console.log(this.phase.netByConsultant)
+    console.log('calculateByPay', this.phase.netConsultant, this.mode)
 
     this.phase = optimizeByPay(this.phase)
 
@@ -156,7 +194,7 @@ export default class Phase extends Vue {
     this.$emit('save', this.phase) // send the modified phase to the parent for totals and averages
   }
   calculateByPrice () {
-    console.log('calculateByPrice', this.phase.price, this.price)
+    console.log('calculateByPrice', this.phase.price, this.mode)
 
     this.phase = optimizeByPrice(this.phase)
 
@@ -183,6 +221,8 @@ export default class Phase extends Vue {
         }
       }
     }
+
+    this.pay = this.phase.pay.toString()
 
     // save signal
     this.$emit('save', this.phase) // send the modified phase to the parent for totals and averages

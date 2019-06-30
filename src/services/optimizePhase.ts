@@ -2,9 +2,12 @@ import PhaseObject from '../types'
 import round from '../utils'
 import contributionRates from '../data'
 
-export function optimizeByPrice (phase: PhaseObject) {
+const maxJeh: number = 400
+
+function optimize (phase:PhaseObject) {
+  console.log('optimize', phase.pay, phase.price)
   // optimize : maximize the jeh to 400 €
-  if (phase.jeh < phase.price) {
+  if (phase.jeh < phase.price || true) {
     if (phase.price >= 400) {
       phase.jeh = 400
     } else {
@@ -12,17 +15,7 @@ export function optimizeByPrice (phase: PhaseObject) {
     }
   }
 
-  // compute data
   phase.nbJeh = phase.price / phase.jeh
-  phase.pay = round(phase.price - (phase.price * phase.margin / 100))
-  phase.urssafJE = round(phase.nbJeh * contributionRates.urssafBase * contributionRates.jeContrib +
-    phase.pay * contributionRates.jepay)
-  phase.marginJE = round((phase.price - phase.pay - phase.urssafJE) / phase.price * 100)
-  phase.urssafConsultant = round(phase.nbJeh * contributionRates.urssafBase * contributionRates.ConsultantContrib +
-    phase.pay * contributionRates.ConsultantPay)
-  phase.netConsultant = round(phase.pay - phase.urssafConsultant)
-  phase.netByConsultant = round(phase.netConsultant / phase.nbConsultant)
-  phase.pcConsultant = round(phase.netByConsultant / phase.price * 100)
 
   // optimize : if the number of JEH is not integer,
   // then we need to increase the number of JEH and drecrease the amount of each JEH.
@@ -31,9 +24,60 @@ export function optimizeByPrice (phase: PhaseObject) {
     phase.jeh = round(phase.price / phase.nbJeh)
   }
 
+  // compute data
+  phase.urssafJE = round(phase.nbJeh * contributionRates.urssafBase *
+    contributionRates.jeContrib + phase.pay * contributionRates.jepay)
+  phase.marginJE = round((phase.price - phase.pay - phase.urssafJE) / phase.price * 100)
+  phase.urssafConsultant = round(phase.nbJeh * contributionRates.urssafBase *
+    contributionRates.ConsultantContrib + phase.pay * contributionRates.ConsultantPay)
+  phase.netConsultant = round(phase.pay - phase.urssafConsultant)
+  phase.netByConsultant = round(phase.netConsultant / phase.nbConsultant)
+  phase.pcConsultant = round(phase.netByConsultant / phase.price * 100)
+
   return phase
 }
 
-export function optimizeByPay (phase: PhaseObject) {
-  return phase
+export function optimizeByPrice (phase: PhaseObject) {
+  console.log('optimizeByPrice', phase.pay, phase.price)
+  phase.pay = round(phase.price * (1 - phase.margin / 100))
+  return optimize(phase)
 }
+
+export function optimizeByPay (phase: PhaseObject) {
+  console.log('optimizeByPay', phase.pay, phase.price)
+  phase.price = round(phase.pay / (1 - phase.margin / 100))
+  return optimize(phase)
+}
+
+// export function optimizeByPay (phase: PhaseObject) {
+//   let n: number = 0
+//   let currentMargin: number = 0.15
+//   do {
+//     phase.price = round(phase.pay * (1 + currentMargin))
+//     phase.nbJeh = phase.nbConsultant
+//     do {
+//       phase.jeh = phase.price / phase.nbJeh
+//       phase.nbJeh += phase.nbConsultant
+//     } while (phase.jeh <= maxJeh)
+//     phase.nbJeh -= phase.nbConsultant
+//     phase.urssafJE = round(phase.nbJeh * contributionRates.urssafBase * contributionRates.jeContrib +
+//       phase.pay * contributionRates.jepay)
+//     phase.marginJE = round((phase.price - phase.pay - phase.urssafJE) / phase.price * 100)
+//     currentMargin += 0.001
+//     // console.log('again 1', phase.marginJE, phase.margin - 5)
+//     if (n > 50000) {
+//       console.log('abort', n)
+//       return phase
+//     }
+//     n += 1
+//   } while (phase.marginJE < phase.margin - 5)
+//
+//   phase.urssafConsultant = round(phase.nbJeh * contributionRates.urssafBase * contributionRates.ConsultantContrib +
+//     phase.pay * contributionRates.ConsultantPay)
+//   phase.netConsultant = round(phase.pay - phase.urssafConsultant)
+//   phase.netByConsultant = round(phase.netConsultant / phase.nbConsultant)
+//   phase.pcConsultant = round(phase.netByConsultant / phase.price * 100)
+//
+//   console.log(phase.jeh)
+//   return phase
+// }
