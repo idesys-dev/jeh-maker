@@ -47,23 +47,23 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 
 import PhaseObject from '../types'
-import round from '../utils'
+import { optimizeByPay, optimizeByPrice } from '../services/optimizePhase'
 
 @Component
 export default class Phase extends Vue {
   // Props
-  @Prop() private phase!: PhaseObject;
-  @Prop() private contributions!: any;
+  @Prop() private phase!: PhaseObject
+  @Prop() private contributions!: any
 
   // Data
-  errorJeh: string = ''; // not enough JEH for every concultant
-  errorPrice: string = ''; // price under 80 €
-  warningMessage: string = ''; // some consultant will have less JEH than other
-  price: string = '0'; // variable (v-model)
-  margin: string = '0'; // variable (v-model)
-  nbConsultant: string = '0'; // variable (v-model)
-  netConsultant: string = '0'; // variable (v-model)
-  deleted: boolean = false; // true when the phase is deleting
+  errorJeh: string = '' // not enough JEH for every concultant
+  errorPrice: string = '' // price under 80 €
+  warningMessage: string = '' // some consultant will have less JEH than other
+  price: string = '0' // variable (v-model)
+  margin: string = '0' // variable (v-model)
+  nbConsultant: string = '0' // variable (v-model)
+  netConsultant: string = '0' // variable (v-model)
+  deleted: boolean = false // true when the phase is deleting
 
   // Lifecycle hood
   created () {
@@ -127,100 +127,41 @@ export default class Phase extends Vue {
 
   calculateByPay () {
     console.log('calculateByPay')
-
-    this.phase.netByConsultant = round(this.phase.netConsultant / this.phase.nbConsultant)
     console.log(this.phase.netByConsultant)
-    //
-    // // optimize : maximize the jeh to 400 €
-    // if (this.phase.jeh < this.phase.price) {
-    //   if (this.phase.price >= 400) {
-    //     this.phase.jeh = 400;
-    //   }
-    //   else {
-    //     this.phase.jeh = this.phase.price;
-    //   }
-    // }
-    //
-    // // compute data
-    // this.phase.nbJeh = this.phase.price / this.phase.jeh;
-    // this.phase.pay = round(this.phase.price - (this.phase.price * this.phase.margin / 100));
-    // this.phase.urssafJE = round(this.phase.nbJeh * this.contributions.urssafBase * this.contributions.jeContrib +
-    //   this.phase.pay * this.contributions.jepay);
-    // this.phase.marginJE = round((this.phase.price - this.phase.pay - this.phase.urssafJE) / this.phase.price * 100);
-    // this.phase.urssafConsultant = round(this.phase.nbJeh * this.contributions.urssafBase * this.contributions.ConsultantContrib +
-    //   this.phase.pay * this.contributions.ConsultantPay);
-    // this.phase.pcConsultant = round(this.phase.netByConsultant / this.phase.price * 100);
-    //
-    // // optimize : if the number of JEH is not integer,
-    // // then we need to increase the number of JEH and drecrease the amount of each JEH.
-    // if (!Number.isInteger(this.phase.nbJeh)) {
-    //   this.phase.nbJeh = Math.floor(this.phase.nbJeh) + 1;
-    //   this.phase.jeh = this.phase.price / this.phase.nbJeh;
-    // }
-    //
-    // this.netConsultant = this.phase.netConsultant;
-    //
-    // // error handling
-    // if (this.phase.jeh < 80) {
-    //   this.phase.jeh = 80;
-    // }
-    // if (this.phase.price < 80) {
-    //   this.errorPrice = 'Prix inférieur à 80 €';
-    //   this.errorJeh = '';
-    //   this.warningMessage = '';
-    // }
-    // else {
-    //   this.errorPrice = '';
-    //   if (this.phase.nbConsultant > this.phase.nbJeh) {
-    //     this.errorJeh = 'Pas assez de JEH pour les intervenants.';
-    //   }
-    //   else {
-    //     this.errorJeh = '';
-    //     if (!Number.isInteger(this.phase.nbJeh / this.phase.nbConsultant)) {
-    //       this.warningMessage =  'Les JEH ne sont pas réparties équitablement entre les intervenants.';
-    //     }
-    //     else {
-    //       this.warningMessage = '';
-    //     }
-    //   }
-    // }
-    //
-    // // save signal
-    // this.$emit('save', this.phase); // send the modified phase to the parent for totals and averages
-  }
-  calculateByPrice () {
-    // console.log(this.$parent);
-    console.log('calculateByPrice', this.phase.price, this.price)
 
-    // optimize : maximize the jeh to 400 €
-    if (this.phase.jeh < this.phase.price) {
-      if (this.phase.price >= 400) {
-        this.phase.jeh = 400
+    this.phase = optimizeByPay(this.phase)
+
+    // error handling
+    if (this.phase.jeh < 80) {
+      this.phase.jeh = 80
+    }
+    if (this.phase.price < 80) {
+      this.errorPrice = 'Prix inférieur à 80 €'
+      this.errorJeh = ''
+      this.warningMessage = ''
+    } else {
+      this.errorPrice = ''
+      if (this.phase.nbConsultant > this.phase.nbJeh) {
+        this.errorJeh = 'Pas assez de JEH pour les intervenants.'
       } else {
-        this.phase.jeh = this.phase.price
+        this.errorJeh = ''
+        if (!Number.isInteger(this.phase.nbJeh / this.phase.nbConsultant)) {
+          this.warningMessage = 'Les JEH ne sont pas réparties équitablement entre les intervenants.'
+        } else {
+          this.warningMessage = ''
+        }
       }
     }
 
-    // compute data
-    this.phase.nbJeh = this.phase.price / this.phase.jeh
-    this.phase.pay = round(this.phase.price - (this.phase.price * this.phase.margin / 100))
-    this.phase.urssafJE = round(this.phase.nbJeh * this.contributions.urssafBase * this.contributions.jeContrib +
-      this.phase.pay * this.contributions.jepay)
-    this.phase.marginJE = round((this.phase.price - this.phase.pay - this.phase.urssafJE) / this.phase.price * 100)
-    this.phase.urssafConsultant = round(this.phase.nbJeh * this.contributions.urssafBase * this.contributions.ConsultantContrib +
-      this.phase.pay * this.contributions.ConsultantPay)
-    this.phase.netConsultant = round(this.phase.pay - this.phase.urssafConsultant)
-    this.phase.netByConsultant = round(this.phase.netConsultant / this.phase.nbConsultant)
-    this.phase.pcConsultant = round(this.phase.netByConsultant / this.phase.price * 100)
+    // save signal
+    this.$emit('save', this.phase) // send the modified phase to the parent for totals and averages
+  }
+  calculateByPrice () {
+    // console.log(this.$parent)
+    console.log('calculateByPrice', this.phase.price, this.price)
 
-    // optimize : if the number of JEH is not integer,
-    // then we need to increase the number of JEH and drecrease the amount of each JEH.
-    if (!Number.isInteger(this.phase.nbJeh)) {
-      this.phase.nbJeh = Math.floor(this.phase.nbJeh) + 1
-      this.phase.jeh = this.phase.price / this.phase.nbJeh
-    }
+    this.phase = optimizeByPrice(this.phase)
 
-    console.log('this.netConsultant', this.netConsultant)
     this.netConsultant = this.phase.netConsultant.toString()
 
     // error handling

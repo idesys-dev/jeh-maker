@@ -84,8 +84,13 @@
           </tr>
         </thead>
         <tbody>
-          <tr is="Phase" :phase="phase" v-for="phase in phases" :key="phase.id"
-          :contributions="contributionRates" @delete="deleteEvent" @save="saveEvent"></tr>
+          <tr is="Phase"
+            :phase="phase"
+            v-for="phase in phases" :key="phase.id"
+            @delete="deleteEvent"
+            @save="saveEvent"
+          >
+          </tr>
         </tbody>
       </table>
     </div>
@@ -110,13 +115,6 @@ export default class JehMaker extends Vue {
 
   // Data
   phases: PhaseObject[] = []
-  contributionRates: object = {
-    urssafBase: 39.04, // Base URSSAF
-    jeContrib: 0.30116, // Part JE : Total des taux des cotisations indexées sur l'assiette de cotisation
-    jepay: 0.042, // Part JE : Total des taux des cotisations indexées sur la rémunération brute
-    ConsultantContrib: 0.1605, // Part Etudiant : Total des taux des cotisations indexées sur l'assiette de cotisation
-    ConsultantPay: 0 // Part Etudiant : Total des taux des cotisations indexées sur la rémunération brute
-  }
   totalPrice:number = 0
   averageJeh:number = 0
   totalConsultant:number = 0
