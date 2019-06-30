@@ -36,3 +36,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 # Misc
 
 https://stackoverflow.com/a/47005707
+
+# TODO
+ - Optimize by pay
+ - Consultant feature: attribute each JEH to consultant, add consultant
+ - Use Vuex: contribution rates, phases
+ - Optimize between phases

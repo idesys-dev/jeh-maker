@@ -144,7 +144,6 @@ export default class JehMaker extends Vue {
   // Watchers
   @Watch('fee')
   WatchFee () {
-    console.log('JEHMAKER watch fee')
     this.updateChart()
   }
 
@@ -250,8 +249,7 @@ export default class JehMaker extends Vue {
     this.averagePcConsultant = 0
   }
   updateChart () {
-    console.log('JEHMAKER updateChart')
-    let newChartData = {
+    this.chartData = {
       labels: ['JE', 'URSSAF', 'Intervenants'],
       datasets: [{
         data: [
@@ -266,7 +264,6 @@ export default class JehMaker extends Vue {
         ]
       }]
     }
-    this.chartData = newChartData
   }
 }
 </script>
