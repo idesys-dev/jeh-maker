@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="ui container">
-      <h1 class="ui header">JEH Maker</h1>
+    <div is="sui-container">
+      <h1 is="sui-header" >JEH Maker</h1>
       <p>Marge opérationnelle : {{ opMargin | euro}} ({{averageMarginJe}} %)</p>
-      <div class="ui two column grid">
-        <div class="two column row">
-          <div class="ui column">
+      <sui-grid :columns="2">
+        <sui-grid-row>
+          <sui-grid-column>
             <table class="ui celled collapsing table">
               <tr>
                 <td>Frais</td>
@@ -25,14 +25,14 @@
                 <td>{{ (totalPrice + fee) * 1.2 | round | euro }}</td>
               </tr>
             </table>
-          </div>
-          <div class="ui column">
+          </sui-grid-column>
+          <sui-grid-column>
             <div class="chart">
               <DistributionChart :chartData="chartData"></DistributionChart>
             </div>
-          </div>
-        </div>
-      </div>
+          </sui-grid-column>
+        </sui-grid-row>
+      </sui-grid>
       <button class="ui button" @click="newPhase">Nouvelle phase</button>
     </div>
     <div class="ui fluid container scrollable">
@@ -84,7 +84,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr is="phase-item" :phase="phase" v-for="phase in phases" :key="phase.id"
+          <tr is="Phase" :phase="phase" v-for="phase in phases" :key="phase.id"
           :contributions="contributionRates" @delete="deleteEvent" @save="saveEvent"></tr>
         </tbody>
       </table>
@@ -95,13 +95,14 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 
-import DistributionChart from './DistributionChart'
-
+// import DistributionChart from './DistributionChart'
+import DistributionChart from '../chart/ReadingChart.vue'
 import PhaseObject from '../types'
-import { round } from '../utils'
+import Phase from './Phase.vue'
+import round from '../utils'
 
 @Component({
-  components: { DistributionChart }
+  components: { Phase, DistributionChart }
 })
 export default class JehMaker extends Vue {
   // Props
@@ -145,6 +146,7 @@ export default class JehMaker extends Vue {
   // Watchers
   @Watch('fee')
   WatchFee () {
+    console.log('JEHMAKER watch fee')
     this.updateChart()
   }
 
@@ -250,9 +252,23 @@ export default class JehMaker extends Vue {
     this.averagePcConsultant = 0
   }
   updateChart () {
-    this.chartData.data.datasets[0].data[0] = this.opMargin + this.fee
-    this.chartData.data.datasets[0].data[1] = round(this.totalUrssafJe + this.totalUrssafConsultant)
-    this.chartData.data.datasets[0].data[2] = this.totalNetConsultant
+    console.log('JEHMAKER updateChart')
+    let newChartData = {
+      labels: ['JE', 'URSSAF', 'Intervenants'],
+      datasets: [{
+        data: [
+          this.opMargin + this.fee,
+          round(this.totalUrssafJe + this.totalUrssafConsultant),
+          this.totalNetConsultant
+        ],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)'
+        ]
+      }]
+    }
+    this.chartData = newChartData
   }
 }
 </script>

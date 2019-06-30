@@ -9,8 +9,11 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@types/semantic-ui": "^2.2.7",
     "chart.js": "^2.8.0",
     "core-js": "^2.6.5",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-vue": "^0.8.1",
     "vue": "^2.6.10",
     "vue-chartjs": "^3.4.2",
     "vue-chartjs-typescript": "^3.3.3",

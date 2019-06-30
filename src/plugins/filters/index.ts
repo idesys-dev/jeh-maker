@@ -1,5 +1,5 @@
 import { percentage, euro } from './filters'
-import { round } from '../../utils'
+import round from '../../utils'
 
 export default {
   install (Vue: any): any {
