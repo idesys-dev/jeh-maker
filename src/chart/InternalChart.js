@@ -3,7 +3,6 @@ const { reactiveProp } = mixins
 
 export default {
   extends: Doughnut,
-  // props: ['chartData'],
   mixins: [reactiveProp],
   data: function () {
     return {
@@ -13,18 +12,12 @@ export default {
           display: false
         },
         tooltips: {
-          bodyFontSize: 20
+          bodyFontSize: 15
         }
       }
     }
   },
-  watch: {
-    chartData () {
-      console.log('watch internal chart chart data', this.chartData)
-    }
-  },
   mounted () {
-    console.log('internal chart mounted', this.chartData)
     this.renderChart(this.chartData, this.options)
   }
 }

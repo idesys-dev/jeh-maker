@@ -80,10 +80,9 @@ export default class Phase extends Vue {
 
   // Watchers
   @Watch('price')
-  Watchprice (price_) {
-    console.log('Phase watch price', this.price, price_)
+  Watchprice () {
+    console.log('Phase watch price', this.price)
     let price = this.toInt(this.price)
-    console.log(price)
     if (!isNaN(price)) {
       this.phase.price = price
       this.calculateByPrice()
@@ -157,7 +156,6 @@ export default class Phase extends Vue {
     this.$emit('save', this.phase) // send the modified phase to the parent for totals and averages
   }
   calculateByPrice () {
-    // console.log(this.$parent)
     console.log('calculateByPrice', this.phase.price, this.price)
 
     this.phase = optimizeByPrice(this.phase)

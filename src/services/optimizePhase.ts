@@ -28,7 +28,7 @@ export function optimizeByPrice (phase: PhaseObject) {
   // then we need to increase the number of JEH and drecrease the amount of each JEH.
   if (!Number.isInteger(phase.nbJeh)) {
     phase.nbJeh = Math.floor(phase.nbJeh) + 1
-    phase.jeh = phase.price / phase.nbJeh
+    phase.jeh = round(phase.price / phase.nbJeh)
   }
 
   return phase
