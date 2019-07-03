@@ -113,7 +113,7 @@ export default class Phase extends Vue {
     }
   }
   calculate () {
-    console.log('calculate')
+    // console.log('calculate', this.phase)
     if (this.mode === 'pay') {
       this.phase = optimizeByPay(this.phase)
     } else if (this.mode === 'price') {

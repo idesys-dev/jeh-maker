@@ -89,6 +89,7 @@
             v-for="phase in phases" :key="phase.id"
             @delete="deleteEvent"
             @save="saveEvent"
+            ref="refPhase"
           >
           </tr>
         </tbody>
@@ -110,9 +111,6 @@ import round from '../utils'
   components: { Phase, DistributionChart }
 })
 export default class JehMaker extends Vue {
-  // Props
-  @Prop() private msg!: string
-
   // Data
   phases: PhaseObject[] = []
   totalPrice:number = 0
@@ -173,6 +171,10 @@ export default class JehMaker extends Vue {
     this.phases.push(newPhase)
   }
   deleteEvent (idPhase: number) {
+    console.log(this.phases)
+    if (!(this.phases.length - 1)) { // keep at least one phase
+      return
+    }
     let prefix = this.phases.slice(0, idPhase - 1)
     let suffix = this.phases.slice(idPhase, this.phases.length)
     let i = 1
@@ -182,24 +184,17 @@ export default class JehMaker extends Vue {
       p.id = i
       i++
     })
-    if (!this.phases.length) { // auto add new phase when delete the last phase
-      this.newPhase()
-    }
+    this.calculate()
+    Vue.nextTick(() => {
+      // calculate all the other phases update,
+      // after the deleted phase is really removed (nextTick)
+      Object.keys(this.$refs.refPhase).forEach((phaseCoponent: any) => {
+        this.$refs.refPhase[phaseCoponent].update('margin')
+      })
+    })
   }
   saveEvent (phase: PhaseObject) {
-    this.phases[phase.id - 1].title = phase.title
-    this.phases[phase.id - 1].price = phase.price
-    this.phases[phase.id - 1].jeh = phase.jeh
-    this.phases[phase.id - 1].nbConsultant = phase.nbConsultant
-    this.phases[phase.id - 1].margin = phase.margin
-    this.phases[phase.id - 1].nbJeh = phase.nbJeh
-    this.phases[phase.id - 1].pay = phase.pay
-    this.phases[phase.id - 1].urssafJE = phase.urssafJE
-    this.phases[phase.id - 1].marginJE = phase.marginJE
-    this.phases[phase.id - 1].urssafConsultant = phase.urssafConsultant
-    this.phases[phase.id - 1].netConsultant = phase.netConsultant
-    this.phases[phase.id - 1].netByConsultant = phase.netByConsultant
-    this.phases[phase.id - 1].pcConsultant = phase.pcConsultant
+    this.phases[phase.id - 1] = phase
     this.calculate()
   }
   calculate () {
