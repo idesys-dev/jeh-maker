@@ -1,4 +1,4 @@
-image: alpine:latest
+image: node:latest
 
 pages:
   stage: deploy
