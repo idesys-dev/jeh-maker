@@ -1,9 +1,9 @@
-image: alpine:latest
-
 pages:
+  image: node:latest
   stage: deploy
   script:
-  - npm run build
+    - npm install --progress=false
+    - npm run build
   artifacts:
     paths:
     - dist
