@@ -4,8 +4,11 @@ pages:
   script:
     - npm install --progress=false
     - npm run build
+    - rm -rf public
+    - mkdir public
+    - cp -r dist/* public
   artifacts:
     paths:
-    - dist
+    - public
   only:
   - master
