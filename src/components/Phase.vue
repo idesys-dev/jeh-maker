@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <tr class="center aligned">
     <td :class="[{warning: warningMessage}, {error: errorJeh}, {error: errorPrice}]">
       <a :title="errorPrice"><i v-if="errorPrice" class="exclamation triangle icon"></i></a>
       <a :title="errorJeh"><i v-if="errorJeh" class="exclamation triangle icon"></i></a>
@@ -187,5 +187,10 @@ export default class Phase extends Vue {
 }
 .scrollable {
   overflow: scroll;
+}
+td {
+  min-width: min-content !important;
+  padding: 0 !important;
+  padding-right: 6px !important;
 }
 </style>

@@ -3,11 +3,11 @@
     <div is="sui-container">
       <h1 is="sui-header" >JEH Maker</h1>
       <p>Marge opérationnelle : {{ opMargin | euro}} ({{averageMarginJe}} %)</p>
-      <sui-grid :columns="2">
+      <sui-grid :columns="3">
         <sui-grid-row>
           <sui-grid-column>
             <table class="ui celled collapsing table">
-              <tr>
+              <tr class="center aligned">
                 <td>Frais</td>
                 <td>
                   <div class="ui verysmall input">
@@ -16,15 +16,22 @@
                   €
                 </td>
               </tr>
-              <tr>
+              <tr class="center aligned">
                 <td>Total HT</td>
                 <td>{{ totalPrice + fee | euro }}</td>
               </tr>
-              <tr>
+              <tr class="center aligned">
                 <td>Total TTC</td>
                 <td>{{ (totalPrice + fee) * 1.2 | round | euro }}</td>
               </tr>
             </table>
+          </sui-grid-column>
+          <sui-grid-column>
+            <consultants
+              @newConsultant="onNewConsultant"
+              @removeConsultant="onRemoveConsultant"
+              >
+            </consultants>
           </sui-grid-column>
           <sui-grid-column>
             <div class="chart">
@@ -33,13 +40,13 @@
           </sui-grid-column>
         </sui-grid-row>
       </sui-grid>
-      <button class="ui button" @click="newPhase">Nouvelle phase</button>
+      <button class="ui primary button" @click="newPhase">Nouvelle phase</button>
     </div>
     <div class="ui fluid container scrollable">
       <table class="ui small celled table">
       <!-- <table class="cell"> -->
         <thead>
-          <tr>
+          <tr class="center aligned">
             <th></th>
             <th></th>
             <th colspan="4" class="center aligned">Description des phases</th>
@@ -48,7 +55,7 @@
             <th colspan="4" class="center aligned">Part intervenant(s)</th> <!-- todo: s que si plusieurs intervenants -->
             <th></th>
           </tr>
-          <tr>
+          <tr class="center aligned">
             <th></th>
             <th></th>
             <th>Intitulé</th>
@@ -65,7 +72,7 @@
             <th>net / intervenant</th>
             <th></th>
           </tr>
-          <tr>
+          <tr class="center aligned">
             <th></th>
             <th></th>
             <th></th>
@@ -105,10 +112,11 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import DistributionChart from '../chart/ReadingChart.vue'
 import PhaseObject from '../types'
 import Phase from './Phase.vue'
+import Consultants from './Consultant.vue'
 import round from '../utils'
 
 @Component({
-  components: { Phase, DistributionChart }
+  components: { Phase, DistributionChart, Consultants }
 })
 export default class JehMaker extends Vue {
   // Data
@@ -138,6 +146,7 @@ export default class JehMaker extends Vue {
       ]
     }]
   }
+  consultants: string[] = []
 
   // Watchers
   @Watch('fee')
@@ -197,6 +206,17 @@ export default class JehMaker extends Vue {
     this.phases[phase.id - 1] = phase
     this.calculate()
   }
+  onNewConsultant (consultant: string) {
+    console.log('jehmaker new consultant', consultant)
+    this.consultants.push(consultant)
+  }
+  onRemoveConsultant (consultant: string) {
+    console.log('jehmaker remove consultant', consultant)
+    this.consultants = this.consultants.filter(consultantName => {
+      return consultantName !== consultant
+    })
+  }
+
   calculate () {
     this.reset()
     let this_ = this
