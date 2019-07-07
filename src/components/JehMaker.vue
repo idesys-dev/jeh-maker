@@ -72,6 +72,19 @@
             <th>net / intervenant</th>
             <th></th>
           </tr>
+          </thead>
+        <tbody>
+          <tr is="Phase"
+            :phase="phase"
+            :consultants="consultants"
+            v-for="phase in phases" :key="phase.id"
+            @delete="deleteEvent"
+            @save="saveEvent"
+            ref="refPhase"
+          >
+          </tr>
+        </tbody>
+        <tfoot>
           <tr class="center aligned">
             <th></th>
             <th></th>
@@ -89,17 +102,7 @@
             <th class="center aligned">{{ totalNetByConsultant | euro }}</th>
             <th></th>
           </tr>
-        </thead>
-        <tbody>
-          <tr is="Phase"
-            :phase="phase"
-            v-for="phase in phases" :key="phase.id"
-            @delete="deleteEvent"
-            @save="saveEvent"
-            ref="refPhase"
-          >
-          </tr>
-        </tbody>
+        </tfoot>
       </table>
     </div>
   </div>
