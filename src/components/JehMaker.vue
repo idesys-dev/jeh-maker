@@ -66,6 +66,7 @@
             <th>Nombre JEH</th>
             <th>URSSAF</th>
             <th>marge</th>
+            <th>Intervenants</th>
             <th>Rémunération</th>
             <th>URSSAF</th>
             <th>net</th>
