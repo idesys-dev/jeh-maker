@@ -1,5 +1,5 @@
 <template>
-  <tr>
+  <tr class="right aligned">
     <td :class="[{warning: warningMessage}, {error: errorJeh}, {error: errorPrice}]">
       <a :title="errorPrice"><i v-if="errorPrice" class="exclamation triangle icon"></i></a>
       <a :title="errorJeh"><i v-if="errorJeh" class="exclamation triangle icon"></i></a>
@@ -30,10 +30,16 @@
         <input type="text" v-model="margin" />
       </div>
     </td>
-    <td class="right aligned">{{ phase.jeh }}</td>
-    <td class="right aligned" :class="{'error': errorJeh}">{{ phase.nbJeh }}</td>
-    <td class="right aligned">{{ phase.urssafJE | euro }}</td>
-    <td class="right aligned">{{ phase.marginJE | percentage }}</td>
+    <td>{{ phase.jeh }}</td>
+    <td :class="{'error': errorJeh}">{{ phase.nbJeh }}</td>
+    <td>{{ phase.urssafJE | euro }}</td>
+    <td>{{ phase.marginJE | percentage }}</td>
+    <td>
+      <multiple-select
+        :options="consultants"
+        :placeholder="'Intervenant'"
+      ></multiple-select>
+    </td>
     <td>
       <div class="ui verysmall input">
         <input
@@ -43,9 +49,9 @@
         />
       </div>
     </td>
-    <td class="right aligned">{{ phase.urssafConsultant | euro }}</td>
-    <td class="right aligned">{{ phase.netConsultant | euro }}</td>
-    <td class="right aligned">{{ phase.netByConsultant | euro }}</td>
+    <td>{{ phase.urssafConsultant | euro }}</td>
+    <td>{{ phase.netConsultant | euro }}</td>
+    <td>{{ phase.netByConsultant | euro }}</td>
     <td @click="deletePhaseEvent"><i class="icon close"></i></td>
     <!-- <td>{{ mode }}</td> -->
   </tr>
@@ -56,12 +62,16 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 
 import PhaseObject from '../types'
 import { optimizeByPay, optimizeByPrice } from '../services/optimizePhase'
+import MultipleSelect from './MultipleSelect.vue'
 
-@Component
+@Component({
+  components: {MultipleSelect}
+})
 export default class Phase extends Vue {
   // Props
   @Prop() private phase!: PhaseObject
   @Prop() private contributions!: any
+  @Prop() private consultants!: string[]
 
   // Data
   errorJeh: string = '' // not enough JEH for every concultant
@@ -75,9 +85,14 @@ export default class Phase extends Vue {
 
   mode: string = 'price' // 'price' or 'pay' (avoid infinite loop cause by watch and calculations)
 
+  consultant: string = '';
+
   // Lifecycle hood
   mounted () {
     this.calculate()
+    if (this.consultants.length) {
+      this.consultant = this.consultants[0]
+    }
   }
 
   // Watchers
@@ -187,5 +202,10 @@ export default class Phase extends Vue {
 }
 .scrollable {
   overflow: scroll;
+}
+td {
+  min-width: min-content !important;
+  padding: 0 !important;
+  padding-right: 6px !important;
 }
 </style>
