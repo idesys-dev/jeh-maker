@@ -18,7 +18,7 @@
               </tr>
               <tr class="center aligned">
                 <td>Total HT</td>
-                <td>{{ totalPrice + fee | euro }}</td>
+                <td>{{ totalPrice + fee | round | euro }}</td>
               </tr>
               <tr class="center aligned">
                 <td>Total TTC</td>
@@ -89,7 +89,7 @@
           <tr class="center aligned">
             <th></th>
             <th></th>
-            <th></th>
+            <th>Total</th>
             <th class="center aligned">{{ totalPrice | euro }}</th>
             <th class="center aligned">{{ totalConsultant }}</th>
             <th class="center aligned">{{ averageMargin | percentage }}</th>
@@ -97,6 +97,7 @@
             <th class="center aligned">{{ totalNbJeh }}</th>
             <th class="center aligned">{{ totalUrssafJe | euro }}</th>
             <th class="center aligned">{{ averageMarginJe | percentage }}</th>
+            <th></th>
             <th class="center aligned">{{ totalPay | euro }}</th>
             <th class="center aligned">{{ totalUrssafConsultant | euro }}</th>
             <th class="center aligned">{{ totalNetConsultant | euro }}</th>
