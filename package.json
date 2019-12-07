@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
+    "lint:fix": "vue-cli-service help lint",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
@@ -19,6 +20,7 @@
     "vue-chartjs-typescript": "^3.3.3",
     "vue-class-component": "^7.0.2",
     "vue-click-outside": "^1.0.7",
+    "vue-clipboard2": "^0.3.1",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1",

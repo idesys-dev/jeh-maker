@@ -30,6 +30,7 @@
             <consultants
               @newConsultant="onNewConsultant"
               @removeConsultant="onRemoveConsultant"
+              :consultants="consultants"
               >
             </consultants>
           </sui-grid-column>
@@ -41,6 +42,7 @@
         </sui-grid-row>
       </sui-grid>
       <button class="ui primary button" @click="newPhase">Nouvelle phase</button>
+      <button class="ui positive button" @click="save">Enregistrer</button>
     </div>
     <div class="ui fluid container scrollable">
       <table class="ui small celled table">
@@ -118,7 +120,7 @@ import DistributionChart from '../chart/ReadingChart.vue'
 import PhaseObject from '../types'
 import Phase from './Phase.vue'
 import Consultants from './Consultant.vue'
-import round from '../utils'
+import { round, utf8ToB64, b64ToUtf8 } from '../utils'
 
 @Component({
   components: { Phase, DistributionChart, Consultants }
@@ -161,7 +163,11 @@ export default class JehMaker extends Vue {
 
   // LifeCycle hood
   created () {
-    this.newPhase()
+    if (this.$route.params.phases) {
+      this.phases = JSON.parse(b64ToUtf8(this.$route.params.phases))
+    } else {
+      this.newPhase()
+    }
   }
 
   // Methods
@@ -284,6 +290,11 @@ export default class JehMaker extends Vue {
         ]
       }]
     }
+  }
+  save () {
+    this.$router.replace('/q/' + utf8ToB64(JSON.stringify(this.phases)))
+    this.$copyText(window.location.href)
+    alert('Un lien a été enregistré dans votre presse-papier')
   }
 }
 </script>

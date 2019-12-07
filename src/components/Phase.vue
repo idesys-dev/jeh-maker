@@ -65,7 +65,7 @@ import { optimizeByPay, optimizeByPrice } from '../services/optimizePhase'
 import MultipleSelect from './MultipleSelect.vue'
 
 @Component({
-  components: {MultipleSelect}
+  components: { MultipleSelect }
 })
 export default class Phase extends Vue {
   // Props
