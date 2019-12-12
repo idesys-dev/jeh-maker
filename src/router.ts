@@ -15,7 +15,7 @@ export default new Router({
     },
     {
       path: '/q/:phases',
-      name: 'home',
+      name: 'phases',
       component: Home
     }
   ]
