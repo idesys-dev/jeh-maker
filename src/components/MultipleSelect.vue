@@ -51,7 +51,7 @@ import ClickOutside from 'vue-click-outside'
 
 export default {
   props: ['options', 'placeholder', 'value'],
-  data() {
+  data () {
     return {
       ui: {
         hidePlaceholder: false,
@@ -61,81 +61,81 @@ export default {
       chosen: {},
       // internal value/text object for storing unique options
       actual_options: {}
-    };
+    }
   },
-  created() {
-    this.updateOptions();
+  created () {
+    this.updateOptions()
   },
   watch: {
-    options() {
-      this.updateOptions();
+    options () {
+      this.updateOptions()
     },
-    filter(v) {
+    filter (v) {
       if (v.length > 0) {
-        this.ui.hidePlaceholder = true;
+        this.ui.hidePlaceholder = true
       } else {
-        this.ui.hidePlaceholder = false;
+        this.ui.hidePlaceholder = false
       }
     },
-    chosen() {
+    chosen () {
       // let upstairs know something changed here
-      this.$emit('input', Object.keys(this.chosen));
+      this.$emit('input', Object.keys(this.chosen))
     }
   },
   computed: {
-    filtered() {
-      console.log('computed filtered');
-      let filtered = {};
+    filtered () {
+      console.log('computed filtered')
+      let filtered = {}
       for (let key in this.actual_options) {
-        console.log(key);
+        console.log(key)
         // exclude already selected options
-        if (key in this.chosen) continue;
+        if (key in this.chosen) continue
         // then filter off of `filter` search text
-        let value = this.actual_options[key].toLowerCase();
+        let value = this.actual_options[key].toLowerCase()
         if (value.indexOf(this.filter.toLowerCase()) > -1) {
-          filtered[key] = this.actual_options[key];
+          filtered[key] = this.actual_options[key]
         }
       }
-      return filtered;
+      return filtered
     }
   },
   methods: {
-    updateOptions() {
+    updateOptions () {
       // normalize the passed in `options` into the internal `_options`
       if (Array.isArray(this.options)) {
         this.options.forEach((o) => {
           if (typeof o === 'string') {
-            this.actual_options[o] = o;
+            this.actual_options[o] = o
           } else {
             // assume we've got the object shape
-            this.actual_options[o.value] = o.text;
+            this.actual_options[o.value] = o.text
           }
-        });
+        })
       } else {
         // let's assume we have an object...just 'cause...
-        this.actual_options = this.options;
+        this.actual_options = this.options
       }
       // add any passed in values to the `chosen`
       if (Array.isArray(this.value)) {
         this.value.forEach((v) => {
-          this.chosen[v] = this.actual_options[v];
-        });
+          this.chosen[v] = this.actual_options[v]
+        })
       }
     },
-    choose(value, text) {
-      this.$set(this.chosen, value, text);
-      this.filter = '';
-      this.focus();
+    choose (value, text) {
+      this.$set(this.chosen, value, text)
+      this.filter = ''
+      this.focus()
     },
-    unchoose(value) {
-      this.$delete(this.chosen, value);
-      this.focus();
+    unchoose (value) {
+      this.$delete(this.chosen, value)
+      this.focus()
     },
-    close() {
-      this.ui.open = false;
+    close () {
+      this.ui.open = false
     },
-    focus() {
-      this.$el.querySelector('input.search').focus();
+    focus () {
+      this.$el.querySelector('input.search').focus()
     }
   },
   directives: {

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-import round from './utils'
+import { round } from './utils'
 
 Vue.filter('round', round)
 
