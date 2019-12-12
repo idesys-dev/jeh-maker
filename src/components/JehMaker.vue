@@ -2,7 +2,22 @@
   <div>
     <div is="sui-container">
       <h1 is="sui-header" >JEH Maker</h1>
-      <p>Marge opérationnelle : {{ opMargin | euro}} ({{averageMarginJe}} %)</p>
+      <table class="ui celled table center aligned segment">
+        <thead>
+          <tr>
+            <th>Marge opérationnelle</th>
+            <th>Marge brute</th>
+            <th>Part URSSAF	</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ opMargin | euro}} ({{averageMarginJe}} %)</td>
+            <td>{{ totalPrice-totalPay | euro}} ({{((totalPrice-totalPay)/totalPrice*100).toFixed(2)}}  %)</td>
+            <td>{{ totalUrssafJe | euro}} ({{(totalUrssafJe/totalPrice*100).toFixed(2)}} %)</td>
+          </tr>
+        </tbody>
+      </table>
       <sui-grid :columns="3">
         <sui-grid-row>
           <sui-grid-column>
@@ -18,7 +33,7 @@
               </tr>
               <tr class="center aligned">
                 <td>Total HT</td>
-                <td>{{ totalPrice + fee | euro }}</td>
+                <td>{{ totalPrice + fee | round | euro }}</td>
               </tr>
               <tr class="center aligned">
                 <td>Total TTC</td>
@@ -30,6 +45,7 @@
             <consultants
               @newConsultant="onNewConsultant"
               @removeConsultant="onRemoveConsultant"
+              :consultants="consultants"
               >
             </consultants>
           </sui-grid-column>
@@ -41,6 +57,7 @@
         </sui-grid-row>
       </sui-grid>
       <button class="ui primary button" @click="newPhase">Nouvelle phase</button>
+      <button class="ui positive button" @click="save">Enregistrer</button>
     </div>
     <div class="ui fluid container scrollable">
       <table class="ui small celled table">
@@ -89,18 +106,19 @@
           <tr class="center aligned">
             <th></th>
             <th></th>
-            <th></th>
+            <th>Total</th>
             <th class="center aligned">{{ totalPrice | euro }}</th>
-            <th class="center aligned">{{ totalConsultant }}</th>
+            <th class="center aligned"></th>
             <th class="center aligned">{{ averageMargin | percentage }}</th>
             <th class="center aligned">{{ averageJeh | euro }}</th>
             <th class="center aligned">{{ totalNbJeh }}</th>
             <th class="center aligned">{{ totalUrssafJe | euro }}</th>
             <th class="center aligned">{{ averageMarginJe | percentage }}</th>
+            <th></th>
             <th class="center aligned">{{ totalPay | euro }}</th>
             <th class="center aligned">{{ totalUrssafConsultant | euro }}</th>
             <th class="center aligned">{{ totalNetConsultant | euro }}</th>
-            <th class="center aligned">{{ totalNetByConsultant | euro }}</th>
+            <th class="center aligned"></th>
             <th></th>
           </tr>
         </tfoot>
@@ -117,7 +135,7 @@ import DistributionChart from '../chart/ReadingChart.vue'
 import PhaseObject from '../types'
 import Phase from './Phase.vue'
 import Consultants from './Consultant.vue'
-import round from '../utils'
+import { round, utf8ToB64, b64ToUtf8 } from '../utils'
 
 @Component({
   components: { Phase, DistributionChart, Consultants }
@@ -127,7 +145,6 @@ export default class JehMaker extends Vue {
   phases: PhaseObject[] = []
   totalPrice:number = 0
   averageJeh:number = 0
-  totalConsultant:number = 0
   averageMargin:number = 0
   totalNbJeh:number = 0
   totalPay:number = 0
@@ -135,7 +152,6 @@ export default class JehMaker extends Vue {
   averageMarginJe:number = 0
   totalUrssafConsultant:number = 0
   totalNetConsultant:number = 0
-  totalNetByConsultant:number = 0
   averagePcConsultant:number = 0
   fee:number = 100
   opMargin:number = 0
@@ -160,7 +176,11 @@ export default class JehMaker extends Vue {
 
   // LifeCycle hood
   created () {
-    this.newPhase()
+    if (this.$route.params.phases) {
+      this.phases = JSON.parse(b64ToUtf8(this.$route.params.phases))
+    } else {
+      this.newPhase()
+    }
   }
 
   // Methods
@@ -231,15 +251,13 @@ export default class JehMaker extends Vue {
     this.phases.forEach(function (v) {
       this_.totalPrice += v.price
       averageJeh += v.jeh
-      this_.totalConsultant += v.nbConsultant
       averageMargin += v.margin
+      averageMarginJe += v.marginJE
       this_.totalNbJeh += v.nbJeh
       this_.totalPay += v.pay
       this_.totalUrssafJe += v.urssafJE
-      averageMarginJe += v.marginJE
       this_.totalUrssafConsultant += v.urssafConsultant
       this_.totalNetConsultant += v.netConsultant
-      this_.totalNetByConsultant += v.netByConsultant
       averagePcConsultant += v.pcConsultant
     })
     this.averageJeh = round(averageJeh / this.phases.length)
@@ -247,7 +265,6 @@ export default class JehMaker extends Vue {
     this.averageMarginJe = round(averageMarginJe / this.phases.length)
     this.averagePcConsultant = round(averagePcConsultant / this.phases.length)
     this.totalNetConsultant = round(this.totalNetConsultant) // round needed otherwise 24.0000000000001 sometimes
-    this.totalNetByConsultant = round(this.totalNetByConsultant)
     this.totalUrssafConsultant = round(this.totalUrssafConsultant)
     this.totalUrssafJe = round(this.totalUrssafJe)
     this.opMargin = round(this.totalPrice - this.totalUrssafJe - this.totalPay)
@@ -256,7 +273,6 @@ export default class JehMaker extends Vue {
   reset () {
     this.totalPrice = 0
     this.averageJeh = 0
-    this.totalConsultant = 0
     this.averageMargin = 0
     this.totalNbJeh = 0
     this.totalPay = 0
@@ -264,7 +280,6 @@ export default class JehMaker extends Vue {
     this.averageMarginJe = 0
     this.totalUrssafConsultant = 0
     this.totalNetConsultant = 0
-    this.totalNetByConsultant = 0
     this.averagePcConsultant = 0
   }
   updateChart () {
@@ -283,6 +298,11 @@ export default class JehMaker extends Vue {
         ]
       }]
     }
+  }
+  save () {
+    this.$router.replace('/q/' + utf8ToB64(JSON.stringify(this.phases)))
+    this.$copyText(window.location.href)
+    alert('Un lien a été enregistré dans votre presse-papier')
   }
 }
 </script>

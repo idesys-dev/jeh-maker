@@ -1,5 +1,5 @@
 import PhaseObject from '../types'
-import round from '../utils'
+import { round } from '../utils'
 import contributionRates from '../data'
 
 const maxJeh: number = 400
