@@ -1,7 +1,7 @@
 <template>
   <div>
     <div is="sui-container">
-      <h1 is="sui-header" >JEH Maker</h1>
+      <h1 is="sui-header">JEH Maker</h1>
       <table class="ui celled table center aligned segment">
         <thead>
           <tr>
@@ -293,9 +293,9 @@ export default class JehMaker extends Vue {
           this.totalNetConsultant
         ],
         backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)'
+          'rgba(231, 76, 60, 1)',
+          'rgba(52, 73, 94, 1)',
+          'rgba(208, 216, 232, 1)'
         ]
       }]
     }
