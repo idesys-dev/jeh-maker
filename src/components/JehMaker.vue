@@ -66,8 +66,9 @@
           <tr class="center aligned">
             <th></th>
             <th></th>
-            <th colspan="4" class="center aligned">Description des phases</th>
+            <th colspan="2" class="center aligned">Description des phases</th>
             <th colspan="2" class="center aligned">JEH</th>
+            <th colspan="2"></th>
             <th colspan="2" class="center aligned">Part JE</th>
             <th colspan="4" class="center aligned">Part intervenant(s)</th> <!-- todo: s que si plusieurs intervenants -->
             <th></th>
