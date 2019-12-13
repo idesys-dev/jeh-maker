@@ -1,4 +1,4 @@
-# jeh-maker-v2
+# IdéSYS- JEHMaker
 
 ## Project setup
 ```
@@ -30,15 +30,7 @@ npm run lint
 npm run test:unit
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
-
-# Misc
-
-https://stackoverflow.com/a/47005707
-
 # TODO
  - Consultant feature: attribute each JEH to consultant, add consultant
- - Use Vuex: contribution rates, phases
- - Save in database
  - Optimize between phases
+ - internationalisation
