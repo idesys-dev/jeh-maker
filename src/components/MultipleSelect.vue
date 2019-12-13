@@ -6,15 +6,17 @@
     @click="focus"
   >
     <i class="dropdown icon" @click.stop="ui.open = !ui.open"></i>
-    <a
-      v-if="Object.keys(chosen).length > 0"
-      v-for="(text, value) in chosen"
-      :data-value="value"
-      class="ui label transition visible"
-      style="display: inline-block !important;"
-    >
-      {{text}}
-    <i class="delete icon" @click.stop="unchoose(value)"></i></a>
+    <span v-if="Object.keys(chosen).length > 0">
+      <a
+        v-for="(text, value) in chosen"
+        :key="text"
+        :data-value="value"
+        class="ui label transition visible"
+        style="display: inline-block !important;"
+      >
+        {{text}}
+      <i class="delete icon" @click.stop="unchoose(value)"></i></a>
+    </span>
     <input
       class="search"
       autocomplete="off"
@@ -34,6 +36,7 @@
       <div
         class="item"
         v-for="(text, value) in actual_options"
+        :key="text"
         :data-value="value"
         @click.stop="choose(value, text)"
       >
@@ -84,10 +87,8 @@ export default {
   },
   computed: {
     filtered () {
-      console.log('computed filtered')
       let filtered = {}
       for (let key in this.actual_options) {
-        console.log(key)
         // exclude already selected options
         if (key in this.chosen) continue
         // then filter off of `filter` search text

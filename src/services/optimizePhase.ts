@@ -5,7 +5,6 @@ import contributionRates from '../data'
 const maxJeh: number = 400
 
 function optimize (phase:PhaseObject) {
-  console.log('optimize', phase.pay, phase.price)
   // optimize : maximize the jeh to 400 €
   // if (phase.jeh < phase.price || true) {
   if (phase.price >= 400) {
@@ -37,13 +36,11 @@ function optimize (phase:PhaseObject) {
 }
 
 export function optimizeByPrice (phase: PhaseObject) {
-  console.log('optimizeByPrice', phase.pay, phase.price)
   phase.pay = round(phase.price * (1 - phase.margin / 100))
   return optimize(phase)
 }
 
 export function optimizeByPay (phase: PhaseObject) {
-  console.log('optimizeByPay', phase.pay, phase.price)
   phase.price = round(phase.pay / (1 - phase.margin / 100))
   return optimize(phase)
 }

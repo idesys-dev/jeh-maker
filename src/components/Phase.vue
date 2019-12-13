@@ -98,28 +98,23 @@ export default class Phase extends Vue {
   // Watchers
   @Watch('price')
   Watchprice () {
-    console.log('Phase watch price', this.price, this.mode)
     this.update('price')
   }
   @Watch('pay')
   WatchnetConsultant () {
-    console.log('Phase watch pay', this.pay, this.mode)
     this.update('pay')
   }
   @Watch('nbConsultant')
   WatchnbConsultant () {
-    console.log('Phase watch nbConsultant', this.nbConsultant, this.mode)
     this.update('nbConsultant')
   }
   @Watch('margin')
   Watchmargin () {
-    console.log('Phase watch margin', this.margin, this.mode)
     this.update('margin')
   }
 
   // Methods
   update (name: string) {
-    console.log('update', name)
     let val = this.toInt(this[name])
     if (!isNaN(val)) {
       this.phase[name] = val
@@ -128,7 +123,6 @@ export default class Phase extends Vue {
     }
   }
   calculate () {
-    // console.log('calculate', this.phase)
     if (this.mode === 'pay') {
       this.phase = optimizeByPay(this.phase)
     } else if (this.mode === 'price') {

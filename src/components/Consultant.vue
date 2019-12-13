@@ -40,7 +40,6 @@ export default class Phase extends Vue {
 
   // Methods
   newConsultant () {
-    console.log('newConsultant', this.consultantName)
     if (this.consultantName) {
       this.consultants.push(this.consultantName)
       this.$emit('newConsultant', this.consultantName)

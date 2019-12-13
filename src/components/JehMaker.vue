@@ -7,7 +7,7 @@
           <tr>
             <th>Marge opérationnelle</th>
             <th>Marge brute</th>
-            <th>Part URSSAF	</th>
+            <th>Part URSSAF</th>
           </tr>
         </thead>
         <tbody>
@@ -204,7 +204,6 @@ export default class JehMaker extends Vue {
     this.phases.push(newPhase)
   }
   deleteEvent (idPhase: number) {
-    console.log(this.phases)
     if (!(this.phases.length - 1)) { // keep at least one phase
       return
     }
@@ -231,11 +230,9 @@ export default class JehMaker extends Vue {
     this.calculate()
   }
   onNewConsultant (consultant: string) {
-    console.log('jehmaker new consultant', consultant)
     this.consultants.push(consultant)
   }
   onRemoveConsultant (consultant: string) {
-    console.log('jehmaker remove consultant', consultant)
     this.consultants = this.consultants.filter(consultantName => {
       return consultantName !== consultant
     })
