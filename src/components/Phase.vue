@@ -14,12 +14,14 @@
     <td>
       <div class="ui verysmall input" :class="{'error': errorPrice}">
         <input
-        type="text"
-        v-model="price"
-        @focus="mode = 'price'"
+          type="text"
+          v-model="price"
+          @focus="mode = 'price'"
         />
       </div>
     </td>
+    <td>{{ phase.jeh }}</td>
+    <td :class="{'error': errorJeh}">{{ phase.nbJeh }}</td>
     <td>
       <div class="ui verymini input" :class="{'error': errorJeh}">
         <input type="text" v-model="nbConsultant" />
@@ -30,10 +32,8 @@
         <input type="text" v-model="margin" />
       </div>
     </td>
-    <td>{{ phase.jeh }}</td>
-    <td :class="{'error': errorJeh}">{{ phase.nbJeh }}</td>
-    <td>{{ phase.urssafJE | euro }}</td>
     <td>{{ phase.marginJE | percentage }}</td>
+    <td>{{ phase.urssafJE | euro }}</td>
     <td>
       <multiple-select
         :options="consultants"

@@ -13,7 +13,7 @@
         <tbody>
           <tr>
             <td>{{ opMargin | euro}} ({{averageMarginJe}} %)</td>
-            <td>{{ totalPrice-totalPay | euro}} ({{((totalPrice-totalPay)/totalPrice*100).toFixed(2)}}  %)</td>
+            <td>{{ totalPrice - totalPay | round | euro}} ({{((totalPrice-totalPay)/totalPrice*100).toFixed(2)}}  %)</td>
             <td>{{ totalUrssafJe | euro}} ({{(totalUrssafJe/totalPrice*100).toFixed(2)}} %)</td>
           </tr>
         </tbody>
@@ -77,12 +77,16 @@
             <th></th>
             <th>Intitulé</th>
             <th>Prix</th>
+            <th>Montant JEH
+              <p class="bold-normal">Moyenne : {{ averageJeh | euro }}</p>
+            </th>
+            <th>Nombre JEH</th>
             <th>Nb intervenant</th>
             <th>Marge</th>
-            <th>Montant JEH</th>
-            <th>Nombre JEH</th>
+            <th>Marge<p class="bold-normal">opérationnelle</p>
+              <!-- <p class="bold-normal">Moyenne : {{ averageMarginJe | percentage }}</p> -->
+            </th>
             <th>URSSAF</th>
-            <th>marge</th>
             <th>Intervenants</th>
             <th>Rémunération</th>
             <th>URSSAF</th>
@@ -103,22 +107,22 @@
           </tr>
         </tbody>
         <tfoot>
-          <tr class="center aligned">
+          <tr class="right aligned">
             <th></th>
             <th></th>
             <th>Total</th>
-            <th class="center aligned">{{ totalPrice | euro }}</th>
-            <th class="center aligned"></th>
-            <th class="center aligned">{{ averageMargin | percentage }}</th>
-            <th class="center aligned">{{ averageJeh | euro }}</th>
-            <th class="center aligned">{{ totalNbJeh }}</th>
-            <th class="center aligned">{{ totalUrssafJe | euro }}</th>
-            <th class="center aligned">{{ averageMarginJe | percentage }}</th>
+            <th>{{ totalPrice | euro }}</th>
             <th></th>
-            <th class="center aligned">{{ totalPay | euro }}</th>
-            <th class="center aligned">{{ totalUrssafConsultant | euro }}</th>
-            <th class="center aligned">{{ totalNetConsultant | euro }}</th>
-            <th class="center aligned"></th>
+            <th >{{ totalNbJeh }}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>{{ totalUrssafJe | euro }}</th>
+            <th></th>
+            <th>{{ totalPay | euro }}</th>
+            <th>{{ totalUrssafConsultant | euro }}</th>
+            <th>{{ totalNetConsultant | euro }}</th>
+            <th></th>
             <th></th>
           </tr>
         </tfoot>
@@ -322,5 +326,8 @@ export default class JehMaker extends Vue {
 .chart {
   width: auto;
   height: 200px;
+}
+.bold-normal {
+  font-weight: 400;
 }
 </style>
