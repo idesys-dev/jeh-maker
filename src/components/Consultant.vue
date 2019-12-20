@@ -1,7 +1,7 @@
 <template>
   <div class="new-consultant-wrapper">
     <div class="ui left icon input">
-      <input type="text" v-model="consultantName">
+      <input type="text" v-model="consultantName" v-on:keyup.enter="newConsultant">
       <i class="users icon"></i>
     </div>
 

@@ -2,8 +2,12 @@
 // make sure you update `yourProjectName` with the name of your GitLab project
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production'
-  // ? '/yourProjectName/'
-    ? '/jeh-maker-v2/'
-    : '/'
+  publicPath: '/',
+  pwa: {
+    name: 'JEH maker - IdéSYS',
+    themeColor: '#34495E',
+    msTileColor: '#000000',
+    appleMobileWebAppCapable: 'yes',
+    appleMobileWebAppStatusBarStyle: 'black'
+  }
 }
