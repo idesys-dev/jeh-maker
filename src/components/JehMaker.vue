@@ -1,63 +1,51 @@
 <template>
   <div>
     <div is="sui-container">
-      <h1 is="sui-header">JEH Maker</h1>
-      <table class="ui celled table center aligned segment">
-        <thead>
-          <tr>
-            <th>Marge opérationnelle</th>
-            <th>Marge brute</th>
-            <th>Part URSSAF</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ opMargin | euro}} ({{averageMarginJe}} %)</td>
-            <td>{{ totalPrice - totalPay | round | euro}} ({{((totalPrice-totalPay)/totalPrice*100).toFixed(2)}}  %)</td>
-            <td>{{ totalUrssafJe | euro}} ({{(totalUrssafJe/totalPrice*100).toFixed(2)}} %)</td>
-          </tr>
-        </tbody>
-      </table>
+     <MargesDetails
+        :opMargin="opMargin"
+        :totalPrice="totalPrice"
+        :averageMarginJe="averageMarginJe"
+        :totalPay="totalPay"
+        :totalUrssafJe="totalUrssafJe"
+     />
       <sui-grid :columns="3">
         <sui-grid-row>
           <sui-grid-column>
-            <table class="ui celled collapsing table">
-              <tr class="center aligned">
-                <td>Frais</td>
-                <td>
-                  <div class="ui verysmall input">
-                    <input type="text" v-model.number="fee" />
-                  </div>
-                  €
-                </td>
-              </tr>
-              <tr class="center aligned">
-                <td>Total HT</td>
-                <td>{{ totalPrice + fee | round | euro }}</td>
-              </tr>
-              <tr class="center aligned">
-                <td>Total TTC</td>
-                <td>{{ (totalPrice + fee) * 1.2 | round | euro }}</td>
-              </tr>
-            </table>
+              <Frais v-model="fee" :totalPrice="totalPrice"/>
           </sui-grid-column>
           <sui-grid-column>
-            <consultants
+            <!-- <consultants
               @newConsultant="onNewConsultant"
               @removeConsultant="onRemoveConsultant"
               :consultants="consultants"
               >
-            </consultants>
+            </consultants> -->
           </sui-grid-column>
           <sui-grid-column>
-            <div class="chart">
               <DistributionChart :chartData="chartData"></DistributionChart>
-            </div>
           </sui-grid-column>
         </sui-grid-row>
       </sui-grid>
       <button class="ui primary button" @click="newPhase">Nouvelle phase</button>
-      <button class="ui positive button" @click="save">Enregistrer</button>
+      <button class="ui positive button" @click="exportUrl">Export</button>
+      <div class="ui action input">
+        <input type="text" v-model="urlImport" v-on:keyup.enter="importUrl" placeholder="https://">
+        <button class="ui button" v-on:click="importUrl">Importer</button>
+      </div>
+       <sui-modal v-model="openExportPopup" basic>
+          <div class="ui icon header">
+            <i class="clipboard icon"></i>
+            <sui-modal-header> Un lien a été enregistré dans votre presse-papier</sui-modal-header>
+          </div>
+          <div class="content centered">
+              <sui-input v-model="url" disabled id="inputUrl" />
+          </div>
+          <sui-modal-actions>
+              <sui-button class="ui green ok inverted button" positive @click.native="toggleExportPopup" >
+                OK
+              </sui-button>
+          </sui-modal-actions>
+      </sui-modal>
     </div>
     <div class="ui fluid container scrollable">
       <table class="ui small celled table">
@@ -83,12 +71,12 @@
             </th>
             <th>Nombre JEH</th>
             <th>Nb intervenant</th>
-            <th>Marge</th>
+            <th>Marge <p class="bold-normal">brute</p></th>
             <th>Marge<p class="bold-normal">opérationnelle</p>
               <!-- <p class="bold-normal">Moyenne : {{ averageMarginJe | percentage }}</p> -->
             </th>
             <th>URSSAF</th>
-            <th>Intervenants</th>
+            <!-- <th>Intervenants</th> -->
             <th>Rémunération</th>
             <th>URSSAF</th>
             <th>net</th>
@@ -99,6 +87,7 @@
         <tbody>
           <tr is="Phase"
             :phase="phase"
+            :taux="taux"
             :consultants="consultants"
             v-for="phase in phases" :key="phase.id"
             @delete="deleteEvent"
@@ -119,7 +108,7 @@
             <th></th>
             <th></th>
             <th>{{ totalUrssafJe | euro }}</th>
-            <th></th>
+            <!-- <th></th> -->
             <th>{{ totalPay | euro }}</th>
             <th>{{ totalUrssafConsultant | euro }}</th>
             <th>{{ totalNetConsultant | euro }}</th>
@@ -137,15 +126,19 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 
 // import DistributionChart from './DistributionChart'
 import DistributionChart from '../chart/ReadingChart.vue'
-import PhaseObject from '../types'
+import { PhaseObject, TauxObject } from '../types'
 import Phase from './Phase.vue'
 import Consultants from './Consultant.vue'
+import Frais from './Frais.vue'
+import MargesDetails from './MargesDetails.vue'
 import { round, utf8ToB64, b64ToUtf8 } from '../utils'
 
 @Component({
-  components: { Phase, DistributionChart, Consultants }
+  components: { Phase, DistributionChart, Consultants, MargesDetails, Frais }
 })
 export default class JehMaker extends Vue {
+  @Prop() taux!: TauxObject;
+
   // Data
   phases: PhaseObject[] = []
   totalPrice:number = 0
@@ -160,29 +153,34 @@ export default class JehMaker extends Vue {
   averagePcConsultant:number = 0
   fee:number = 100
   opMargin:number = 0
-  chartData: any = {
-    labels: ['JE', 'URSSAF', 'Intervenants'],
-    datasets: [{
-      data: [55, 5, 45],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)'
-      ]
-    }]
-  }
+
   consultants: string[] = []
 
-  // Watchers
-  @Watch('fee')
-  WatchFee () {
-    this.updateChart()
-  }
+  openExportPopup:boolean = false;
+  url:string= '';
+  urlImport:string= '';
 
+  get chartData ():Object {
+    return {
+      labels: ['JE', 'URSSAF', 'Intervenants'],
+      datasets: [{
+        data: [
+          this.opMargin,
+          this.totalUrssafJe,
+          this.totalPay
+        ],
+        backgroundColor: [
+          'rgba(231, 76, 60, 1)',
+          'rgba(52, 73, 94, 1)',
+          'rgba(208, 216, 232, 1)'
+        ]
+      }]
+    }
+  }
   // LifeCycle hood
   created () {
     if (this.$route.params.phases) {
-      this.phases = JSON.parse(b64ToUtf8(this.$route.params.phases))
+      this.importFromB64(this.$route.params.phases)
     } else {
       this.newPhase()
     }
@@ -242,7 +240,6 @@ export default class JehMaker extends Vue {
       return consultantName !== consultant
     })
   }
-
   calculate () {
     this.reset()
     let this_ = this
@@ -270,8 +267,8 @@ export default class JehMaker extends Vue {
     this.totalUrssafConsultant = round(this.totalUrssafConsultant)
     this.totalUrssafJe = round(this.totalUrssafJe)
     this.opMargin = round(this.totalPrice - this.totalUrssafJe - this.totalPay)
-    this.updateChart()
   }
+
   reset () {
     this.totalPrice = 0
     this.averageJeh = 0
@@ -284,27 +281,30 @@ export default class JehMaker extends Vue {
     this.totalNetConsultant = 0
     this.averagePcConsultant = 0
   }
-  updateChart () {
-    this.chartData = {
-      labels: ['JE', 'URSSAF', 'Intervenants'],
-      datasets: [{
-        data: [
-          this.opMargin + this.fee,
-          round(this.totalUrssafJe + this.totalUrssafConsultant),
-          this.totalNetConsultant
-        ],
-        backgroundColor: [
-          'rgba(231, 76, 60, 1)',
-          'rgba(52, 73, 94, 1)',
-          'rgba(208, 216, 232, 1)'
-        ]
-      }]
-    }
+
+  exportUrl () {
+    let json = { fee: this.fee, phases: this.phases }
+    this.$router.push({ name: 'phases', params: { phases: utf8ToB64(JSON.stringify(json)) } })
+    this.url = window.location.href
+    this.$copyText(this.url)
+    this.openExportPopup = true
   }
-  save () {
-    this.$router.replace('/q/' + utf8ToB64(JSON.stringify(this.phases)))
-    this.$copyText(window.location.href)
-    alert('Un lien a été enregistré dans votre presse-papier')
+
+  toggleExportPopup () {
+    this.openExportPopup = !this.openExportPopup
+  }
+
+  private importFromB64 (b64) {
+    let jsonImported = JSON.parse(b64ToUtf8(b64))
+    this.fee = jsonImported.fee
+    this.phases = jsonImported.phases
+  }
+
+  importUrl () {
+    let urlSplit = this.urlImport.split('/')
+    if (urlSplit.length > 2 && urlSplit[urlSplit.length - 2] === 'p') {
+      this.importFromB64(urlSplit[urlSplit.length - 1])
+    }
   }
 }
 </script>
@@ -322,7 +322,7 @@ export default class JehMaker extends Vue {
   margin-bottom: 20px;
 }
 .scrollable {
-  overflow: scroll;
+  overflow-x: scroll;
 }
 .chart {
   width: auto;
@@ -330,5 +330,9 @@ export default class JehMaker extends Vue {
 }
 .bold-normal {
   font-weight: 400;
+}
+
+#inputUrl{
+  width: 100%;
 }
 </style>

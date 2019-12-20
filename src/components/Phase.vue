@@ -34,12 +34,12 @@
     </td>
     <td>{{ phase.marginJE | percentage }}</td>
     <td>{{ phase.urssafJE | euro }}</td>
-    <td>
+    <!-- <td>
       <multiple-select
         :options="consultants"
         :placeholder="'Intervenant'"
       ></multiple-select>
-    </td>
+    </td> -->
     <td>
       <div class="ui verysmall input">
         <input
@@ -60,7 +60,7 @@
 <script lang='ts'>
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 
-import PhaseObject from '../types'
+import { PhaseObject, TauxObject } from '../types'
 import { optimizeByPay, optimizeByPrice } from '../services/optimizePhase'
 import MultipleSelect from './MultipleSelect.vue'
 
@@ -71,7 +71,8 @@ export default class Phase extends Vue {
   // Props
   @Prop() private phase!: PhaseObject
   @Prop() private contributions!: any
-  @Prop() private consultants!: string[]
+  // @Prop() private consultants!: string[]
+  @Prop() private taux!: TauxObject
 
   // Data
   errorJeh: string = '' // not enough JEH for every concultant
@@ -90,9 +91,9 @@ export default class Phase extends Vue {
   // Lifecycle hood
   mounted () {
     this.calculate()
-    if (this.consultants.length) {
-      this.consultant = this.consultants[0]
-    }
+    // if (this.consultants.length) {
+    //   this.consultant = this.consultants[0]
+    // }
   }
 
   // Watchers
@@ -124,9 +125,9 @@ export default class Phase extends Vue {
   }
   calculate () {
     if (this.mode === 'pay') {
-      this.phase = optimizeByPay(this.phase)
+      this.phase = optimizeByPay(this.phase, this.taux)
     } else if (this.mode === 'price') {
-      this.phase = optimizeByPrice(this.phase)
+      this.phase = optimizeByPrice(this.phase, this.taux)
     }
 
     // error handling

@@ -1,0 +1,53 @@
+<template>
+  <div>
+    <sui-button @click.native="toggle">Afficher les taux</sui-button>
+    <sui-modal v-model="open">
+      <sui-modal-header>Taux</sui-modal-header>
+      <sui-modal-content image>
+        <sui-modal-description>
+        <table class="ui celled table">
+          <thead>
+            <tr>
+                <th>Libelle</th>
+                <th>Taux</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr v-for="label in Object.keys(content)" v-bind:key="label">
+                  <td>{{label}}</td>
+                  <td><sui-input class="w-100"  v-model="content[label]" @input="handleInput" type="text"/></td>
+              </tr>
+
+          </tbody>
+        </table>
+        </sui-modal-description>
+      </sui-modal-content>
+      <sui-modal-actions>
+        <sui-button positive @click.native="toggle">
+          OK
+        </sui-button>
+      </sui-modal-actions>
+    </sui-modal>
+  </div>
+</template>
+
+<script lang="ts">
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { TauxObject } from '../types'
+
+@Component
+export default class Taux extends Vue {
+  @Prop() value!:TauxObject
+
+  content:TauxObject = this.value
+  open:boolean = false;
+
+  toggle () {
+    this.open = !this.open
+  }
+
+  handleInput (e) {
+    this.$emit('input', this.content)
+  }
+}
+</script>

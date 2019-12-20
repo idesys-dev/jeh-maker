@@ -29,8 +29,3 @@ npm run lint
 ```
 npm run test:unit
 ```
-
-# TODO
- - Consultant feature: attribute each JEH to consultant, add consultant
- - Optimize between phases
- - internationalisation
