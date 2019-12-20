@@ -1,7 +1,7 @@
 <template>
   <div class="home ui vertical stripe segment" >
     <div>
-      <h1 is="sui-header">JEH Maker</h1>
+      <h1 is="sui-header">JEH Maker DEV</h1>
       <JehMaker :taux="this.taux"/>
       <Taux v-model="this.taux" />
     </div>
