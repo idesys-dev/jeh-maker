@@ -1,4 +1,3 @@
-# .gitlab-ci.yml file to be placed in the root of your repository
 
 pages: # the job must be named pages
   image: node:latest
@@ -12,5 +11,4 @@ pages: # the job must be named pages
     paths:
       - public # artifact path must be /public for GitLab Pages to pick it up
   only:
-    - master
-    - develop
+    - tags
