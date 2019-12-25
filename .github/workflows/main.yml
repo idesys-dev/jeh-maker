@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   linter:
-    name: Linter 
+    name: Linter
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1
@@ -20,7 +20,7 @@ jobs:
 
 
   test:
-    name: Test 
+    name: Test
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1
@@ -35,7 +35,7 @@ jobs:
       run: npm run test:unit
 
   build:
-    name: Build 
+    name: Build
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1
@@ -50,7 +50,7 @@ jobs:
       run: npm run build
 
   chromatic:
-    name: Chromatic 
+    name: Chromatic
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1
@@ -63,7 +63,7 @@ jobs:
           ${{ runner.os }}-node-
     - run: npm ci
     - uses: chromaui/action@v1
-      with: 
+      with:
         appCode: ${{ secrets.CHROMATIC_APP_CODE }}
         token: ${{ secrets.GITHUB_TOKEN }}
 
