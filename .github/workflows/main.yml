@@ -3,20 +3,68 @@ name: CI
 on: [push]
 
 jobs:
+  linter:
+    name: Linter 
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - run: npm ci
+    - name: Linter
+      run: npm run lint
+
+
   test:
     name: Test 
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js '10'
-      uses: actions/setup-node@v1
+    - uses: actions/cache@v1
       with:
-        node-version: '10'
-    - name: Install Dependencies
-      run: npm install
-    - name: Linter
-      run: npm run lint
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - run: npm ci
     - name: Unit Test
       run: npm run test:unit
+
+  build:
+    name: Build 
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - run: npm ci
     - name: Build
       run: npm run build
+
+  chromatic:
+    name: Chromatic 
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v1
+    - run: npm ci
+    - uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - run: npm ci
+    - uses: chromaui/action@v1
+      with: 
+        appCode: ${{ secrets.CHROMATIC_APP_CODE }}
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+
