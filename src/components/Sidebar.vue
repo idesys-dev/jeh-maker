@@ -1,5 +1,5 @@
 <template>
-<SuiSidebar animation="overlay" :visible="visible" direction="right">
+<SuiSidebar animation="overlay" :visible="visible" width="very wide" direction="right">
 
       <button @click="toogleSibebar"  class="btnmenu"><i class="icon close"/></button>
       <h1 is="sui-header">Hello</h1>
