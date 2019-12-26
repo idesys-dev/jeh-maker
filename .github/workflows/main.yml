@@ -2,25 +2,17 @@ name: CI
 
 on: [push]
 
+
 jobs:
   linter:
     name: Linter
     runs-on: 'ubuntu-latest'
     steps:
-    - uses: actions/checkout@v1
-    - uses: actions/cache@v1
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    - run: npm ci
     - name: Linter
       run: npm run lint
 
-
   test:
-    name: Test
+    name: Test Unit
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1
@@ -33,6 +25,9 @@ jobs:
     - run: npm ci
     - name: Unit Test
       run: npm run test:unit
+    - name: CodeCov
+      run: npm run codecov  
+    
 
   build:
     name: Build
@@ -48,13 +43,41 @@ jobs:
     - run: npm ci
     - name: Build
       run: npm run build
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: build
+        # Directory containing files to upload
+        path: dist
+
+  storybook:
+    name: Storybook
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - run: npm ci
+    - name: Build
+      run: npm run build-storybook
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: storybook
+        # Directory containing files to upload
+        path: storybook-static
 
   chromatic:
     name: Chromatic
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1
-    - run: npm ci
     - uses: actions/cache@v1
       with:
         path: ~/.npm
