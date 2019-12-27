@@ -48,8 +48,7 @@ jobs:
     name: Test e2e
     runs-on: 'ubuntu-latest'
     steps:
-    - uses: actions/checkout@v1
-    - run: docker run -d -p 4444:4444 -v /dev/shm:/dev/shm --name selenium-standalone --rm selenium/standalone-chrome:3.141.59-titanium
+    - uses: actions/checkout@v1x
     - uses: actions/cache@v1
       with:
         path: ~/.npm
@@ -57,6 +56,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
     - run: npm ci
+    - run: npm install chromedriver 
     - name: Test e2e
       run: npm run test:e2e
 
