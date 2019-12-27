@@ -51,7 +51,7 @@ jobs:
     - uses: actions/checkout@v1
     - uses: nanasess/setup-chromedriver@master
       with:
-        chromedriver-version: '79.0.3945.16'
+        chromedriver-version: '78.0.3904.70'
     - uses: actions/cache@v1
       with:
         path: ~/.npm
