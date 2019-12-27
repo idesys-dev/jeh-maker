@@ -56,7 +56,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-node-
     - run: npm ci
-    - run: npm install chromedriver 
+    - run: npm install chromedriver --save-dev
     - name: Test e2e
       run: npm run test:e2e
 
