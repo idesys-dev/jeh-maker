@@ -49,9 +49,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
     - uses: actions/checkout@v1
-    - uses: nanasess/setup-chromedriver@master
-      with:
-        chromedriver-version: '78.0.3904.70'
+    - run: docker run -d -p 4444:4444 -v /dev/shm:/dev/shm --name selenium-standalone --rm selenium/standalone-chrome:3.141.59-titanium
     - uses: actions/cache@v1
       with:
         path: ~/.npm
