@@ -19,7 +19,7 @@ jobs:
     - name: Linter
       run: npm run lint
 
-  test:
+  test-unit:
     name: Test Unit
     runs-on: 'ubuntu-latest'
     steps:
@@ -36,6 +36,28 @@ jobs:
     - uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: coverage
+        # Directory containing files to upload
+        path: coverage
+
+  test-e2e:
+    name: Test e2e
+    runs-on: 'ubuntu-latest'
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/cache@v1
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+    - run: npm ci
+    - name: Test e2e
+      run: npm run test:e2e
 
   build:
     name: Build
