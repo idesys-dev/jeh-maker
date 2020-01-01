@@ -21,3 +21,9 @@ yarn-error.log*
 *.sw?
 
 .package-lock.json
+
+/coverage
+
+tests/e2e/reports
+*.log
+tests_output

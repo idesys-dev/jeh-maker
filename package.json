@@ -6,13 +6,18 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
+    "test:e2e": "vue-cli-service test:e2e",
+    "test:e2e:firefox": "vue-cli-service test:e2e --headless -e firefox",
     "lint": "vue-cli-service lint",
+    "build-storybook": "build-storybook",
+    "codecov": "codecov",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "test": "npm run test:unit"
   },
   "dependencies": {
     "@types/semantic-ui": "^2.2.7",
     "chart.js": "^2.9.3",
+    "codecov": "^3.6.1",
     "core-js": "^2.6.11",
     "register-service-worker": "^1.6.2",
     "semantic-ui-css": "^2.4.1",
@@ -36,13 +41,13 @@
     "@storybook/addon-storysource": "^5.2.8",
     "@storybook/addons": "^5.2.8",
     "@storybook/vue": "^5.2.8",
-    "@types/chai": "^4.2.7",
-    "@types/mocha": "^5.2.4",
+    "@types/jest": "^24.0.19",
     "@vue/cli-plugin-babel": "^3.12.1",
+    "@vue/cli-plugin-e2e-nightwatch": "^4.1.1",
     "@vue/cli-plugin-eslint": "^3.12.1",
     "@vue/cli-plugin-pwa": "^4.1.1",
     "@vue/cli-plugin-typescript": "^3.12.1",
-    "@vue/cli-plugin-unit-mocha": "^3.12.1",
+    "@vue/cli-plugin-unit-jest": "^4.1.1",
     "@vue/cli-service": "^4.1.1",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
@@ -50,12 +55,36 @@
     "babel-eslint": "^10.0.3",
     "babel-loader": "^8.0.6",
     "babel-preset-vue": "^2.0.2",
-    "chai": "^4.1.2",
+    "chromedriver": "79",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "geckodriver": "^1.19.1",
     "node-sass": "^4.13.0",
     "sass-loader": "^7.3.1",
+    "selenium-server": "^3.141.59",
+    "storybook-chromatic": "^3.4.1",
     "typescript": "^3.7.3",
     "vue-template-compiler": "^2.6.11"
+  },
+  "homepage": "http://jeh-maker.idesys.org/",
+  "nyc": {
+    "require": [
+      "ts-node/register"
+    ],
+    "extension": [
+      ".ts",
+      ".tsx",
+      ".vue"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ],
+    "instrument": true,
+    "sourceMap": true,
+    "all": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/idesys-dev/jeh-maker.git"
   }
 }
