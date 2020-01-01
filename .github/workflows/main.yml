@@ -57,7 +57,7 @@ jobs:
           ${{ runner.os }}-node-
     - run: npm ci
     - name: Test e2e
-      run: npm run test:e2e:ci
+      run: npm run test:e2e:selenium
 
   build:
     name: Build
