@@ -8,7 +8,7 @@
         </tr>
         <tr class="center aligned">
             <td>Total HT</td>
-            <td id="frais-ht">{{ totalPrice + value | euro }}</td>
+            <td id="frais-ht"><p>{{ totalPrice + value | euro }}</p></td>
         </tr>
         <tr class="center aligned">
             <td>Total TTC</td>

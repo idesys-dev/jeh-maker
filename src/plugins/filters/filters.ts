@@ -3,5 +3,5 @@ export function euro (val: number) {
 }
 
 export function percentage (val: number) {
-  return val.toString() + ' %'
+  return new Intl.NumberFormat('fr-FR', { style: 'percent', minimumFractionDigits: 2 }).format(val / 100)
 }

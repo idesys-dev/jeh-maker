@@ -1,7 +1,6 @@
 // For authoring Nightwatch tests, see
 // https://nightwatchjs.org/guide
 
-
 module.exports = {
 
   'exist homepage': browser => {
@@ -22,14 +21,13 @@ module.exports = {
 
   'assign fee': browser => {
     browser
-    .openHomepage()
-    .assert.elementPresent('#frais-ht')
-    .assert.elementPresent('#frais-ttc')
-    .assert.elementPresent('#input-frais input')
-    .setValue('#input-frais input', '6')
-    browser.expect.element('#frais-ht').text.to.endWith('6,00 €') 
-    browser.assert.containsText('#frais-ttc', '2 167,20 €')        
-        .end()
-     
+      .openHomepage()
+      .assert.elementPresent('#frais-ht')
+      .assert.elementPresent('#frais-ttc')
+      .assert.elementPresent('#input-frais input')
+      .setValue('#input-frais input', '6')
+    browser.expect.element('#frais-ht').text.to.endWith('6,00 €')
+    browser.assert.containsText('#frais-ttc', '2 167,20 €')
+      .end()
   }
 }

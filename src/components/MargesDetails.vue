@@ -9,9 +9,9 @@
         </thead>
         <tbody>
           <tr>
-            <td>{{ opMargin | euro}} ({{averageMarginJe}} %)</td>
-            <td>{{ totalPrice - totalPay | round | euro}} ({{margeBrut.toFixed(2)}}  %)</td>
-            <td>{{ totalUrssafJe | euro}} ({{margeOp.toFixed(2)}} %)</td>
+            <td>{{ opMargin | euro}} ({{averageMarginJe  | percentage}})</td>
+            <td>{{ totalPrice - totalPay | round | euro}} ({{margeBrut | percentage}})</td>
+            <td>{{ totalUrssafJe | euro}} ({{margeOp | percentage}} )</td>
           </tr>
         </tbody>
       </table>
