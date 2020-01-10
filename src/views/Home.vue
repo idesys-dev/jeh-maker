@@ -2,7 +2,7 @@
 <div>
   <Sidebar :visible="v" @toogle="toogleSibebar"/>
   <div class="home ui vertical stripe segment">
-      <button @click="toogleSibebar"  class="btnmenu"><i class="info circle icon"/></button>
+      <button @click="toogleSibebar" id="btn__sidebar--open" class="btnmenu"><i class="info circle icon"/></button>
       <h1 is="sui-header">JEH Maker</h1>
       <JehMaker :taux="this.taux"/>
       <Taux v-model="this.taux" />

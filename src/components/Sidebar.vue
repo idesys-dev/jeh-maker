@@ -1,6 +1,6 @@
 <template>
 <SuiSidebar id="sidebar" animation="overlay" :visible="visible" width="very wide" direction="right">
-      <button @click="toogleSibebar"  class="btnmenu"><i class="icon close"/></button>
+      <button @click="toogleSibebar"  id="btn__sidebar--close"   class="btnmenu"><i class="icon close"/></button>
       <h1 is="sui-header" class="sidebar--header">Hello 👋</h1>
       <p>
         Cet outil a pour objectif de faciliter la budgétisation pour les Junior-Entreprises.
