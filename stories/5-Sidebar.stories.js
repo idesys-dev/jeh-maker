@@ -1,5 +1,5 @@
 
-import { withKnobs, object, boolean } from "@storybook/addon-knobs";
+import { withKnobs, boolean } from "@storybook/addon-knobs";
 import { action } from "@storybook/addon-actions";
 import Sidebar from '../src/components/Sidebar';
 
