@@ -179,7 +179,7 @@ export default class JehMaker extends Vue {
   }
   // LifeCycle hood
   created () {
-    if (this.$route.params.phases) {
+    if (this.$route && this.$route.params && this.$route.params.phases) {
       this.importFromB64(this.$route.params.phases)
     } else {
       this.newPhase()
