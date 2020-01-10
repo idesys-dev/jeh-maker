@@ -7,9 +7,11 @@ import VueClipboard from 'vue-clipboard2'
 
 import router from './router'
 import store from './store'
-import './filters'
 import './registerServiceWorker'
 
+import Filters from './plugins/filters'
+
+Vue.use(Filters)
 Vue.use(SuiVue)
 VueClipboard.config.autoSetContainer = true // add this line
 Vue.use(VueClipboard)
