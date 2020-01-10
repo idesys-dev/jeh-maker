@@ -1,7 +1,7 @@
 import { configure } from '@storybook/vue';
 
 import 'semantic-ui-css/semantic.min.css'
-import '../src/filters'
+import '../src/plugins/filters'
 import Vue from 'vue'
 import SuiVue from 'semantic-ui-vue'
 

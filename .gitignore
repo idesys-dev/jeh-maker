@@ -24,3 +24,9 @@ yarn-error.log*
 
 # Storybook
 /storybook-static
+
+/coverage
+
+tests/e2e/reports
+*.log
+tests_output

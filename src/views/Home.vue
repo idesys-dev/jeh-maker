@@ -42,9 +42,10 @@ export default class Home extends Vue {
   height: 100%;
 }
 #footer{
-  position: absolute;
+  position: static;
   bottom: 0;
-  margin: 0%;
+  margin: 0;
+  margin-top: 2%;
   width: 100%;
 }
 .btnmenu{
