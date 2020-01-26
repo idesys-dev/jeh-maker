@@ -1,6 +1,27 @@
 <template>
   <div>
     <div is="sui-container">
+      <div class="ui fluid container">
+        <button class="ui button" @click="exportUrl">Exporter</button>
+        <div class="ui action input">
+          <input type="text" v-model="urlImport" v-on:keyup.enter="importUrl" placeholder="https://">
+          <button class="ui button" v-bind:class="{ positive: isImported }" v-on:click="importUrl">{{(isImported) ? "👌" : "Importer"}}</button>
+        </div>
+        <sui-modal v-model="openExportPopup" basic>
+          <div class="ui icon header">
+            <i class="clipboard icon"></i>
+            <sui-modal-header> Un lien a été enregistré dans votre presse-papier</sui-modal-header>
+          </div>
+          <div class="content centered">
+              <sui-input v-model="url" disabled id="inputUrl" />
+          </div>
+          <sui-modal-actions>
+              <sui-button class="ui green ok inverted button" positive @click.native="toggleExportPopup" >
+                OK
+              </sui-button>
+          </sui-modal-actions>
+        </sui-modal>
+      </div>
      <MargesDetails
         :opMargin="opMargin"
         :totalPrice="totalPrice"
@@ -26,26 +47,11 @@
           </sui-grid-column>
         </sui-grid-row>
       </sui-grid>
+
+      <div class="ui fluid container">
       <button class="ui primary button" @click="newPhase">Nouvelle phase</button>
-      <button class="ui positive button" @click="exportUrl">Export</button>
-      <div class="ui action input">
-        <input type="text" v-model="urlImport" v-on:keyup.enter="importUrl" placeholder="https://">
-        <button class="ui button" v-on:click="importUrl">Importer</button>
       </div>
-       <sui-modal v-model="openExportPopup" basic>
-          <div class="ui icon header">
-            <i class="clipboard icon"></i>
-            <sui-modal-header> Un lien a été enregistré dans votre presse-papier</sui-modal-header>
-          </div>
-          <div class="content centered">
-              <sui-input v-model="url" disabled id="inputUrl" />
-          </div>
-          <sui-modal-actions>
-              <sui-button class="ui green ok inverted button" positive @click.native="toggleExportPopup" >
-                OK
-              </sui-button>
-          </sui-modal-actions>
-      </sui-modal>
+
     </div>
     <div class="ui fluid container scrollable">
       <table class="ui small celled table">
@@ -153,6 +159,7 @@ export default class JehMaker extends Vue {
   averagePcConsultant:number = 0
   fee:number = 100
   opMargin:number = 0
+  isImported:boolean = false
 
   consultants: string[] = []
 
@@ -302,9 +309,16 @@ export default class JehMaker extends Vue {
 
   importUrl () {
     let urlSplit = this.urlImport.split('/')
-    if (urlSplit.length > 2 && urlSplit[urlSplit.length - 2] === 'p') {
+    if (urlSplit.length > 2 && urlSplit[urlSplit.length - 2] === 'p') { // Check if url has 3 parts {url}/p/{code}
       this.importFromB64(urlSplit[urlSplit.length - 1])
     }
+
+    this.isImported = true
+    let t = this
+    setTimeout(function () {
+      t.isImported = false
+      t.urlImport = ''
+    }, 1500)
   }
 }
 </script>
