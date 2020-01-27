@@ -9,7 +9,7 @@ module.exports = {
       .init()
       .waitForElementVisible('#app')
       .assert.elementPresent('#footer')
-      .assert.containsText('h1', 'JEH Maker')
+      .assert.containsText('div.home > h1', 'JEH Maker')
       .end()
   },
 

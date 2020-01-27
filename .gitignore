@@ -22,6 +22,9 @@ yarn-error.log*
 
 .package-lock.json
 
+# Storybook
+/storybook-static
+
 /coverage
 
 tests/e2e/reports
