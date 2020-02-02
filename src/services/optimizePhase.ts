@@ -6,10 +6,10 @@ const maxJeh: number = 400
 function optimize (phase:PhaseObject, contributionRates:TauxObject) {
   // optimize : maximize the jeh to 400 €
   // if (phase.jeh < phase.price || true) {
-  if (phase.price >= 400) {
+  if (phase.price > 400) {
     phase.jeh = 400
   } else {
-    phase.jeh = phase.price
+    phase.jeh = phase.price / phase.nbConsultant
   }
 
   phase.nbJeh = phase.price / phase.jeh

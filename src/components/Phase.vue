@@ -134,8 +134,10 @@ export default class Phase extends Vue {
     if (this.phase.jeh < 80) {
       this.phase.jeh = 80
     }
-    if (this.phase.price < 80) {
-      this.errorPrice = 'Prix inférieur à 80 €'
+    // maybe lowerBound should be an error handled with this.phase.jeh
+    const lowerBound = 80 * this.phase.nbConsultant
+    if (this.phase.price < lowerBound) {
+      this.errorPrice = `Prix inférieur à ${lowerBound} €`
       this.errorJeh = ''
       this.warningMessage = ''
     } else {
