@@ -1,9 +1,10 @@
 import { TauxObject } from '@/types.ts'
 import { round } from '@/utils.ts'
-import { optimizeByPrice, optimizeByPay } from '@/services/optimizePhase.ts'
+import { optimizeByPrice } from '@/services/optimizePhase.ts'
 
 const taux = new TauxObject()
 
+// these functions are only duplicates of the instructions in optimizePhase.ts, they are not here to test data
 function computeUrssafJe (nbJeh:number, pay:number) {
   return round(nbJeh * taux.urssafBase * taux.jeContrib + pay * taux.jepay)
 }
