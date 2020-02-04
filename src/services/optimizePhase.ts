@@ -1,4 +1,5 @@
 import { PhaseObject, TauxObject } from '../types'
+import { round } from '../utils'
 
 const maxJeh: number = 400
 
