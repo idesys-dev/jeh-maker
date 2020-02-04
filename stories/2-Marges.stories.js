@@ -1,14 +1,11 @@
 
-import { withKnobs, number } from "@storybook/addon-knobs";
-import MargesDetails from '../src/components/MargesDetails';
-
-
+import { withKnobs, number } from '@storybook/addon-knobs'
+import MargesDetails from '../src/components/MargesDetails'
 
 export default {
   title: 'MargesDetails',
   decorators: [withKnobs]
-};
-
+}
 
 export const marges = () => ({
   components: { MargesDetails },
@@ -29,7 +26,5 @@ export const marges = () => ({
       default: number('Prix Total', 1000)
     }
   },
-  template: '<MargesDetails  :opMargin="opMargin"  :totalPrice="totalPrice"  :averageMarginJe="averageMarginJe"  :totalPay="totalPay"  :totalUrssafJe="totalUrssafJe" />',
-});
-
-
+  template: '<MargesDetails  :opMargin="opMargin"  :totalPrice="totalPrice"  :averageMarginJe="averageMarginJe"  :totalPay="totalPay"  :totalUrssafJe="totalUrssafJe" />'
+})

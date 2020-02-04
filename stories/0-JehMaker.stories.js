@@ -1,21 +1,14 @@
 
-import { withKnobs, object } from "@storybook/addon-knobs";
-import JehMaker from '../src/components/JehMaker';
-
+import { withKnobs, object } from '@storybook/addon-knobs'
+import JehMaker from '../src/components/JehMaker'
+import { TauxObject } from '../src/types.ts'
 
 export default {
   title: 'JehMaker',
   decorators: [withKnobs]
-};
+}
 
-const defaultValueTaux = {
-  urssafBase : 39.04,
-  jeContrib : 0.30116,
-  jepay : 0.042,
-  consultantContrib : 0.1605,
-  consultantPay : 0,
-};
-
+const defaultValueTaux = new TauxObject(39.04, 0.3116, 0.042, 0.1605, 0)
 
 export const jehmaker = () => ({
   components: { JehMaker },
@@ -25,6 +18,4 @@ export const jehmaker = () => ({
     }
   },
   template: ' <JehMaker :taux="t"/>'
-});
-
-
+})

@@ -1,5 +1,4 @@
 import { TauxObject } from '@/types.ts'
-import { round } from '@/utils.ts'
 import { optimizeByPrice } from '@/services/optimizePhase.ts'
 
 const taux = new TauxObject()
