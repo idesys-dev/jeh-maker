@@ -14,7 +14,7 @@ export default {
   decorators: [withKnobs, tableDeco]
 }
 
-const defaultValueTaux = new TauxObject(39.04, 0.3116, 0.042, 0.1605, 0)
+const defaultValueTaux = new TauxObject(39.04, 0.30116, 0.042, 0.1605, 0)
 const defaultValuePhase = {
   'id': 1,
   'title': 'Title',
