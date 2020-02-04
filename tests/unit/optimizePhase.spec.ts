@@ -4,26 +4,6 @@ import { optimizeByPrice } from '@/services/optimizePhase.ts'
 
 const taux = new TauxObject()
 
-// these functions are only duplicates of the instructions in optimizePhase.ts, they are not here to test data
-function computeUrssafJe (nbJeh:number, pay:number) {
-  return round(nbJeh * taux.urssafBase * taux.jeContrib + pay * taux.jepay)
-}
-function computeMarginJe (price:number, pay:number, nbJeh:number) {
-  return round((price - pay - computeUrssafJe(nbJeh, pay)) / price * 100)
-}
-function computeUrssafConsultant (nbJeh:number, pay:number) {
-  return round(nbJeh * taux.urssafBase * taux.consultantContrib + pay * taux.consultantPay)
-}
-function computeNetConsultant (nbJeh:number, pay:number) {
-  return round(pay - computeUrssafConsultant(nbJeh, pay))
-}
-function computeNetByConsultant (nbConsultant: number, nbJeh:number, pay:number) {
-  return round(computeNetConsultant(nbJeh, pay) / nbConsultant)
-}
-function computePcConsultant (nbConsultant: number, nbJeh:number, pay:number, price:number) {
-  return round(computeNetByConsultant(nbConsultant, nbJeh, pay) / price * 100)
-}
-
 const testSetByPrice = [
   {
     phase: {
@@ -51,12 +31,12 @@ const testSetByPrice = [
       margin: 55,
       nbJeh: 2,
       pay: 360,
-      urssafJE: computeUrssafJe(2, 360),
-      marginJE: computeMarginJe(800, 360, 2),
-      urssafConsultant: computeUrssafConsultant(2, 360),
-      netConsultant: computeNetConsultant(2, 360),
-      netByConsultant: computeNetByConsultant(1, 2, 360),
-      pcConsultant: computePcConsultant(1, 2, 360, 800)
+      urssafJE: taux.computeUrssafJe(2, 360),
+      marginJE: taux.computeMarginJe(800, 360, 2),
+      urssafConsultant: taux.computeUrssafConsultant(2, 360),
+      netConsultant: taux.computeNetConsultant(2, 360),
+      netByConsultant: taux.computeNetByConsultant(1, 2, 360),
+      pcConsultant: taux.computePcConsultant(1, 2, 360, 800)
     }
   },
   {
@@ -85,12 +65,12 @@ const testSetByPrice = [
       margin: 55,
       nbJeh: 2,
       pay: 180,
-      urssafJE: computeUrssafJe(2, 180),
-      marginJE: computeMarginJe(400, 180, 2),
-      urssafConsultant: computeUrssafConsultant(2, 180),
-      netConsultant: computeNetConsultant(2, 180),
-      netByConsultant: computeNetByConsultant(2, 2, 180),
-      pcConsultant: computePcConsultant(2, 2, 180, 400)
+      urssafJE: taux.computeUrssafJe(2, 180),
+      marginJE: taux.computeMarginJe(400, 180, 2),
+      urssafConsultant: taux.computeUrssafConsultant(2, 180),
+      netConsultant: taux.computeNetConsultant(2, 180),
+      netByConsultant: taux.computeNetByConsultant(2, 2, 180),
+      pcConsultant: taux.computePcConsultant(2, 2, 180, 400)
     }
   },
   {
@@ -119,12 +99,12 @@ const testSetByPrice = [
       margin: 55,
       nbJeh: 3,
       pay: 108,
-      urssafJE: computeUrssafJe(3, 108),
-      marginJE: computeMarginJe(240, 108, 3),
-      urssafConsultant: computeUrssafConsultant(3, 108),
-      netConsultant: computeNetConsultant(3, 108),
-      netByConsultant: computeNetByConsultant(3, 3, 108),
-      pcConsultant: computePcConsultant(3, 3, 108, 240)
+      urssafJE: taux.computeUrssafJe(3, 108),
+      marginJE: taux.computeMarginJe(240, 108, 3),
+      urssafConsultant: taux.computeUrssafConsultant(3, 108),
+      netConsultant: taux.computeNetConsultant(3, 108),
+      netByConsultant: taux.computeNetByConsultant(3, 3, 108),
+      pcConsultant: taux.computePcConsultant(3, 3, 108, 240)
     }
   }
 ]
