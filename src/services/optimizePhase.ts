@@ -5,11 +5,10 @@ const maxJeh: number = 400
 
 function optimize (phase:PhaseObject, contributionRates:TauxObject) {
   // optimize : maximize the jeh to 400 €
-  // if (phase.jeh < phase.price || true) {
-  if (phase.price >= 400) {
-    phase.jeh = 400
+  if (phase.price > maxJeh) {
+    phase.jeh = maxJeh
   } else {
-    phase.jeh = phase.price
+    phase.jeh = phase.price / phase.nbConsultant
   }
 
   phase.nbJeh = phase.price / phase.jeh
@@ -22,14 +21,7 @@ function optimize (phase:PhaseObject, contributionRates:TauxObject) {
   }
 
   // compute data
-  phase.urssafJE = round(phase.nbJeh * contributionRates.urssafBase *
-    contributionRates.jeContrib + phase.pay * contributionRates.jepay)
-  phase.marginJE = round((phase.price - phase.pay - phase.urssafJE) / phase.price * 100)
-  phase.urssafConsultant = round(phase.nbJeh * contributionRates.urssafBase *
-    contributionRates.consultantContrib + phase.pay * contributionRates.consultantPay)
-  phase.netConsultant = round(phase.pay - phase.urssafConsultant)
-  phase.netByConsultant = round(phase.netConsultant / phase.nbConsultant)
-  phase.pcConsultant = round(phase.netByConsultant / phase.price * 100)
+  phase = contributionRates.computePhase(phase)
 
   return phase
 }
