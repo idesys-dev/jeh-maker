@@ -25,10 +25,10 @@ export class TauxObject {
   consultantPay: number; // Part Etudiant : Total des taux des cotisations indexées sur la rémunération brute
 
   constructor (
-    urssafBase: number = 39.04,
-    jeContrib: number = 0.30116,
+    urssafBase: number = 40.6,
+    jeContrib: number = 0.3042,
     jepay: number = 0.042,
-    consultantContrib: number = 0.1605,
+    consultantContrib: number = 0.17,
     consultantPay: number = 0
   ) {
     this.urssafBase = urssafBase
