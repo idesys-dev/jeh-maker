@@ -6,6 +6,8 @@
 
 ## A propos
 
+Le Jeh Marker est un outil dédié aux Junior-Entreprises pour l'accompagnement dans la création d'un budget.
+
 
 ## Commandes
 ```bash
