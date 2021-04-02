@@ -43,7 +43,7 @@ const testSetMethods = [
 describe('TauxObject', () => {
   it('create TauxObject', () => {
     const t = new TauxObject()
-    expect(t.urssafBase).toEqual(40.6)
+    expect(t.urssafBase).toEqual(41.0)
   })
 
   describe('TauxObject Methods', () => {
