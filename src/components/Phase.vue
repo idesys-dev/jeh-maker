@@ -52,7 +52,6 @@
     <td>{{ phase.netConsultant | euro }}</td>
     <td>{{ phase.netByConsultant | euro }}</td>
     <td @click="deletePhaseEvent"><i class="icon close"></i></td>
-    <!-- <td>{{ mode }}</td> -->
   </tr>
 </template>
 
@@ -69,7 +68,6 @@ import MultipleSelect from './MultipleSelect.vue'
 export default class Phase extends Vue {
   // Props
   @Prop() private phase!: PhaseObject
-  @Prop() private contributions!: any
   @Prop() private consultants!: string[]
   @Prop() private taux!: TauxObject
 
@@ -170,7 +168,6 @@ export default class Phase extends Vue {
     this.phase.netByConsultant = 0
     this.phase.pcConsultant = 0
   }
-  // toInt(strnb): [number, string] { // convert to integer and if possible then call calculate, otherwise call reset
   toInt (strnb: string): number { // convert to integer and if possible then call calculate, otherwise call reset
     let nb = parseInt(strnb)
     if (isNaN(nb)) {
