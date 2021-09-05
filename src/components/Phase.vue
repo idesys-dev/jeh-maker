@@ -34,12 +34,11 @@
     </td>
     <td>{{ phase.marginJE | percentage }}</td>
     <td>{{ phase.urssafJE | euro }}</td>
-    <!-- <td>
+    <td>
       <multiple-select
         :options="consultants"
-        :placeholder="'Intervenant'"
       ></multiple-select>
-    </td> -->
+    </td>
     <td>
       <div class="ui verysmall input">
         <input
@@ -71,7 +70,7 @@ export default class Phase extends Vue {
   // Props
   @Prop() private phase!: PhaseObject
   @Prop() private contributions!: any
-  // @Prop() private consultants!: string[]
+  @Prop() private consultants!: string[]
   @Prop() private taux!: TauxObject
 
   // Data
@@ -91,9 +90,9 @@ export default class Phase extends Vue {
   // Lifecycle hood
   mounted () {
     this.calculate()
-    // if (this.consultants.length) {
-    //   this.consultant = this.consultants[0]
-    // }
+    if (this.consultants.length) {
+      this.consultant = this.consultants[0]
+    }
   }
 
   // Watchers

@@ -25,12 +25,12 @@
               <Frais v-model="fee" :totalPrice="totalPrice"/>
           </sui-grid-column>
           <sui-grid-column>
-            <!-- <consultants
+            <consultants
               @newConsultant="onNewConsultant"
               @removeConsultant="onRemoveConsultant"
               :consultants="consultants"
               >
-            </consultants> -->
+            </consultants>
           </sui-grid-column>
           <sui-grid-column>
               <DistributionChart :chartData="chartData"></DistributionChart>
@@ -86,7 +86,7 @@
               <!-- <p class="bold-normal">Moyenne : {{ averageMarginJe | percentage }}</p> -->
             </th>
             <th>URSSAF</th>
-            <!-- <th>Intervenants</th> -->
+            <th>Intervenants</th>
             <th>Rémunération</th>
             <th>URSSAF</th>
             <th>net</th>
@@ -118,7 +118,7 @@
             <th></th>
             <th></th>
             <th>{{ totalUrssafJe | euro }}</th>
-            <!-- <th></th> -->
+            <th></th>
             <th>{{ totalPay | euro }}</th>
             <th>{{ totalUrssafConsultant | euro }}</th>
             <th>{{ totalNetConsultant | euro }}</th>
