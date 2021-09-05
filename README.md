@@ -29,3 +29,14 @@ npm run lint
 # Run your unit tests
 npm run test:unit
 ```
+
+## Comment contribuer ?
+
+**Ne pas faire de commit sur master !**
+
+Les tâches à faire sont les issues : <https://github.com/idesys-dev/jeh-maker/issues>
+
+1. Choisir une issue et se l'attribuer
+2. Faire une branche en partant de master
+3. Dev !
+4. Faire une merge request
