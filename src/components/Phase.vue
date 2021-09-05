@@ -68,7 +68,6 @@ import MultipleSelect from './MultipleSelect.vue'
 export default class Phase extends Vue {
   // Props
   @Prop() private phase!: PhaseObject
-  @Prop() private consultants!: string[]
   @Prop() private taux!: TauxObject
 
   // Data
@@ -83,14 +82,9 @@ export default class Phase extends Vue {
 
   mode: string = 'price' // 'price' or 'pay' (avoid infinite loop cause by watch and calculations)
 
-  consultant: string = '';
-
   // Lifecycle hood
   mounted () {
     this.calculate()
-    if (this.consultants.length) {
-      this.consultant = this.consultants[0]
-    }
   }
 
   // Watchers
