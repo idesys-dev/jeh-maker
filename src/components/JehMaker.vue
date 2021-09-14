@@ -191,8 +191,8 @@ export default class JehMaker extends Vue {
     let newPhase = {
       id: this.phases.length + 1,
       title: '',
-      price: 800,
-      jeh: 400,
+      price: 900,
+      jeh: 450,
       nbConsultant: 1,
       margin: 55,
       nbJeh: 0,

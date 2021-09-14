@@ -1,7 +1,7 @@
 import { PhaseObject, TauxObject } from '../types'
 import { round } from '../utils'
 
-const maxJeh: number = 400
+const maxJeh: number = 450
 
 function optimize (phase:PhaseObject, contributionRates:TauxObject) {
   // optimize : maximize the jeh to 400 €
