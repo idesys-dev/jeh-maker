@@ -4,8 +4,7 @@
   <div class="home ui vertical stripe segment">
       <button @click="toogleSibebar" id="btn__sidebar--open" class="btnmenu"><i class="info circle icon"/></button>
       <h1 is="sui-header">JEH Maker</h1>
-      <JehMaker :taux="taux"/>
-      <Taux v-model="taux" />
+      <JehMaker/>
   </div>
     <div id="footer" class="ui inverted  footer segment">
       Fait avec ♥ par <a href="https://idesys.org">IdéSYS</a>
@@ -17,18 +16,15 @@
 import { PhaseObject, TauxObject } from '../types'
 import { Component, Vue } from 'vue-property-decorator'
 import JehMaker from '@/components/JehMaker.vue' // @ is an alias to /src
-import Taux from '@/components/Taux.vue' // @ is an alias to /src
 import Sidebar from '@/components/Sidebar.vue' // @ is an alias to /src
 
 @Component({
   components: {
     JehMaker,
-    Taux,
     Sidebar
   }
 })
 export default class Home extends Vue {
-  taux:TauxObject = new TauxObject()
   v:boolean = false
 
   toogleSibebar () {
