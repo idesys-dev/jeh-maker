@@ -251,6 +251,7 @@ export default class JehMaker extends Vue {
     this.projectName = project.projectName
     this.phases = project.phases
     this.fee = project.fee
+    this.taux = jsonImported.taux
 
     if (project.id) {
       this.id = project.id
@@ -373,6 +374,7 @@ export default class JehMaker extends Vue {
     let urlSplit = this.urlImport.split('/')
     if (urlSplit.length > 2 && urlSplit[urlSplit.length - 2] === 'p') {
       this.importFromB64(urlSplit[urlSplit.length - 1])
+      this.calculate()
     }
   }
 }
