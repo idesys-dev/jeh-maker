@@ -12,5 +12,3 @@ describe('utils', () => {
     expect(round(39.00001)).toEqual(39)
   })
 })
-
-  

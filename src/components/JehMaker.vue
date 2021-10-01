@@ -137,7 +137,7 @@ import { round, utf8ToB64, b64ToUtf8 } from '../utils'
   components: { Phase, DistributionChart, Consultants, MargesDetails, Frais }
 })
 export default class JehMaker extends Vue {
-  @Prop() taux!: TauxObject;
+  @Prop({ required: true }) taux!: TauxObject;
 
   // Data
   phases: PhaseObject[] = []
@@ -186,7 +186,7 @@ export default class JehMaker extends Vue {
     }
   }
 
-  @Watch('phase')
+  @Watch('phases', { deep: true })
   phasesWatcher () {
     this.setUrl()
   }
@@ -238,10 +238,9 @@ export default class JehMaker extends Vue {
     Vue.nextTick(() => {
       // calculate all the other phases update,
       // after the deleted phase is really removed (nextTick)
-      if(this.$refs && this.$refs.refPhase))
-        Object.keys(this.$refs.refPhase).forEach((phaseCoponent: any) => {
-            this.$refs.refPhase[phaseCoponent].update('margin')
-        })
+      Object.keys(this.$refs.refPhase).forEach((phaseCoponent: any) => {
+        this.$refs.refPhase[phaseCoponent].update('margin')
+      })
     })
   }
   saveEvent (phase: PhaseObject) {
@@ -299,6 +298,8 @@ export default class JehMaker extends Vue {
   }
 
   exportUrl () {
+    let json = { fee: this.fee, phases: this.phases }
+    this.$router.push({ name: 'phases', params: { phases: utf8ToB64(JSON.stringify(json)) } })
     this.url = window.location.href
     this.$copyText(this.url)
     this.openExportPopup = true

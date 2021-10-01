@@ -4,8 +4,8 @@
   <div class="home ui vertical stripe segment">
       <button @click="toogleSibebar" id="btn__sidebar--open" class="btnmenu"><i class="info circle icon"/></button>
       <h1 is="sui-header">JEH Maker</h1>
-      <JehMaker :taux="this.taux"/>
-      <Taux v-model="this.taux" />
+      <JehMaker :taux="taux"/>
+      <Taux v-model="taux" />
   </div>
     <div id="footer" class="ui inverted  footer segment">
       Fait avec ♥ by <a href="https://idesys.org">IdéSYS</a>

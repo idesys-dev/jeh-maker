@@ -14,10 +14,9 @@
           </thead>
           <tbody>
               <tr v-for="label in Object.keys(content)" v-bind:key="label">
-                  <td>{{description[label]}}</td>
-                  <td><sui-input class="w-100"  v-model="content[label]" @input="handleInput" type="text"/></td>
+                  <td>{{description[label]}} <small>{{label}}</small></td>
+                  <td><sui-input class="w-100" v-model="content[label]" @input="handleInput" type="text"/></td>
               </tr>
-
           </tbody>
         </table>
         </sui-modal-description>
