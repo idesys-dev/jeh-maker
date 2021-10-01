@@ -8,7 +8,7 @@
       <Taux v-model="this.taux" />
   </div>
     <div id="footer" class="ui inverted  footer segment">
-      Made with ♥ by <a href="https://idesys.org">IdéSYS</a>
+      Fait avec ♥ by <a href="https://idesys.org">IdéSYS</a>
     </div>
 </div>
 </template>
@@ -42,11 +42,12 @@ export default class Home extends Vue {
   height: 100%;
 }
 #footer{
-  position: static;
+  position: fixed;
   bottom: 0;
   margin: 0;
   margin-top: 2%;
   width: 100%;
+  border-radius: 0;
 }
 .btnmenu{
   font-size: 2.5em;
