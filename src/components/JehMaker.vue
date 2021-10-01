@@ -186,7 +186,22 @@ export default class JehMaker extends Vue {
     }
   }
 
+  @Watch('phase')
+  phasesWatcher () {
+    this.setUrl()
+  }
+
+  @Watch('fee')
+  feeWatcher () {
+    this.setUrl()
+  }
+
   // Methods
+  setUrl () {
+    let json = { fee: this.fee, phases: this.phases }
+    this.$router.push({ name: 'phases', params: { phases: utf8ToB64(JSON.stringify(json)) } })
+  }
+
   newPhase () {
     let newPhase = {
       id: this.phases.length + 1,
@@ -223,9 +238,10 @@ export default class JehMaker extends Vue {
     Vue.nextTick(() => {
       // calculate all the other phases update,
       // after the deleted phase is really removed (nextTick)
-      Object.keys(this.$refs.refPhase).forEach((phaseCoponent: any) => {
-        this.$refs.refPhase[phaseCoponent].update('margin')
-      })
+      if(this.$refs && this.$refs.refPhase))
+        Object.keys(this.$refs.refPhase).forEach((phaseCoponent: any) => {
+            this.$refs.refPhase[phaseCoponent].update('margin')
+        })
     })
   }
   saveEvent (phase: PhaseObject) {
@@ -283,8 +299,6 @@ export default class JehMaker extends Vue {
   }
 
   exportUrl () {
-    let json = { fee: this.fee, phases: this.phases }
-    this.$router.push({ name: 'phases', params: { phases: utf8ToB64(JSON.stringify(json)) } })
     this.url = window.location.href
     this.$copyText(this.url)
     this.openExportPopup = true
