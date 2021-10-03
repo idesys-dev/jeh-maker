@@ -38,8 +38,9 @@ export default class Home extends Vue {
 </script>
 
 <style>
-.home{
+.home.ui.vertical.segment{
   height: 100%;
+  padding-bottom: 5rem;
 }
 #footer{
   position: fixed;
