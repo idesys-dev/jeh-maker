@@ -117,7 +117,5 @@ jobs:
     - run: npm ci
     - uses: chromaui/action@v1
       with:
-        appCode: ${{ secrets.CHROMATIC_APP_CODE }}
+        projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
         token: ${{ secrets.GITHUB_TOKEN }}
-
-
