@@ -137,7 +137,7 @@ import { round, utf8ToB64, b64ToUtf8 } from '../utils'
   components: { Phase, DistributionChart, Consultants, MargesDetails, Frais }
 })
 export default class JehMaker extends Vue {
-  @Prop() taux!: TauxObject;
+  @Prop({ required: true }) taux!: TauxObject;
 
   // Data
   phases: PhaseObject[] = []
@@ -186,7 +186,22 @@ export default class JehMaker extends Vue {
     }
   }
 
+  @Watch('phases', { deep: true })
+  phasesWatcher () {
+    this.setUrl()
+  }
+
+  @Watch('fee')
+  feeWatcher () {
+    this.setUrl()
+  }
+
   // Methods
+  setUrl () {
+    let json = { fee: this.fee, phases: this.phases }
+    this.$router.push({ name: 'phases', params: { phases: utf8ToB64(JSON.stringify(json)) } })
+  }
+
   newPhase () {
     let newPhase = {
       id: this.phases.length + 1,

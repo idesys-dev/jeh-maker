@@ -14,10 +14,9 @@
           </thead>
           <tbody>
               <tr v-for="label in Object.keys(content)" v-bind:key="label">
-                  <td>{{label}}</td>
-                  <td><sui-input class="w-100"  v-model="content[label]" @input="handleInput" type="text"/></td>
+                  <td>{{description[label]}}</td>
+                  <td><sui-input class="w-100" v-model="content[label]" @input="handleInput" type="text"/></td>
               </tr>
-
           </tbody>
         </table>
         </sui-modal-description>
@@ -41,6 +40,13 @@ export default class Taux extends Vue {
 
   content:TauxObject = this.value
   open:boolean = false;
+  description = {
+    urssafBase: 'Base URSSAF',
+    jeContrib: "Part JE : Total des taux des cotisations indexées sur l'assiette de cotisation",
+    jepay: 'Part JE : Total des taux des cotisations indexées sur la rémunération brute',
+    consultantContrib: "Part Etudiant : Total des taux des cotisations indexées sur l'assiette de cotisation",
+    consultantPay: 'Part Etudiant : Total des taux des cotisations indexées sur la rémunération brute'
+  }
 
   toggle () {
     this.open = !this.open
