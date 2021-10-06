@@ -47,7 +47,7 @@
     "@vue/cli-plugin-eslint": "^3.12.1",
     "@vue/cli-plugin-pwa": "^4.1.1",
     "@vue/cli-plugin-typescript": "^3.12.1",
-    "@vue/cli-plugin-unit-jest": "^4.1.1",
+    "@vue/cli-plugin-unit-jest": "^4.5.13",
     "@vue/cli-service": "^4.5.13",
     "@vue/eslint-config-standard": "^4.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
