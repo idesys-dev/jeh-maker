@@ -33,7 +33,7 @@ jobs:
     - run: npm ci
     - name: Unit Test
       run: npm run test:unit
-    - uses: codecov/codecov-action@v1
+    - uses: codecov/codecov-action@v2.1.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
     - name: Upload artifact
