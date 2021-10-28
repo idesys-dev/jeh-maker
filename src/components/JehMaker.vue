@@ -26,8 +26,16 @@
           </sui-grid-column>
         </sui-grid-row>
       </sui-grid>
-      <button class="ui primary button" @click="newPhase">Nouvelle phase</button>
-      <button class="ui positive button" @click="exportUrl">Export</button>
+      <div class="ui right action input">
+        <input type="text" placeholder="Nom du projet" v-model="projectName">
+        <div class="ui secondary button" @click="save">
+          <i class="add icon"></i>
+          Add
+        </div>
+      </div>
+      <sui-button @click="openProjectSidebar">List</sui-button>
+      <ProjetsSidebar :visible="isOpenProjectSidebar" @loadProject="loadProject" @close="closeProjectSidebar"/>
+      <button class="ui input positive button" @click="exportUrl">Exporter</button>
       <div class="ui action input">
         <input type="text" v-model="urlImport" v-on:keyup.enter="importUrl" placeholder="https://">
         <button class="ui button" v-on:click="importUrl">Importer</button>
@@ -118,6 +126,9 @@
         </tfoot>
       </table>
     </div>
+    <div class="ui container">
+      <button class="ui primary button" @click="newPhase">Nouvelle phase</button>
+    </div>
   </div>
 </template>
 
@@ -130,16 +141,18 @@ import { PhaseObject, TauxObject } from '../types'
 import Phase from './Phase.vue'
 import Consultants from './Consultant.vue'
 import Frais from './Frais.vue'
+import ProjetsSidebar from './ProjetsSidebar.vue'
 import MargesDetails from './MargesDetails.vue'
 import { round, utf8ToB64, b64ToUtf8 } from '../utils'
 
 @Component({
-  components: { Phase, DistributionChart, Consultants, MargesDetails, Frais }
+  components: { Phase, DistributionChart, Consultants, MargesDetails, Frais, ProjetsSidebar }
 })
 export default class JehMaker extends Vue {
   @Prop({ required: true }) taux!: TauxObject;
 
   // Data
+  projectName:string = '';
   phases: PhaseObject[] = []
   totalPrice:number = 0
   averageJeh:number = 0
@@ -153,10 +166,12 @@ export default class JehMaker extends Vue {
   averagePcConsultant:number = 0
   fee:number = 100
   opMargin:number = 0
+  id:number|null = null
 
   consultants: string[] = []
 
   openExportPopup:boolean = false;
+  isOpenProjectSidebar:boolean = false;
   url:string= '';
   urlImport:string= '';
 
@@ -177,6 +192,15 @@ export default class JehMaker extends Vue {
       }]
     }
   }
+
+  get saveObject () : { projectName: string, phases: PhaseObject[], fee: number } {
+    return {
+      projectName: this.projectName,
+      phases: this.phases,
+      fee: this.fee
+    }
+  }
+
   // LifeCycle hood
   created () {
     if (this.$route && this.$route.params && this.$route.params.phases) {
@@ -198,8 +222,38 @@ export default class JehMaker extends Vue {
 
   // Methods
   setUrl () {
-    let json = { fee: this.fee, phases: this.phases }
-    this.$router.push({ name: 'phases', params: { phases: utf8ToB64(JSON.stringify(json)) } })
+    this.$router.push({ name: 'phases', params: { phases: utf8ToB64(JSON.stringify(this.saveObject)) } }).catch(err => {
+      if (err.name !== 'NavigationDuplicated') {
+        throw err
+      }
+    })
+  }
+
+  openProjectSidebar () {
+    this.isOpenProjectSidebar = true
+  }
+
+  closeProjectSidebar () {
+    this.isOpenProjectSidebar = false
+  }
+
+  async save () {
+    if (this.id) {
+      this.$store.dispatch('updateProject', { ...this.saveObject, id: this.id })
+    } else {
+      this.id = await this.$store.dispatch('addProject', this.saveObject)
+    }
+  }
+
+  loadProject (project:any) {
+    this.projectName = project.projectName
+    this.phases = project.phases
+    this.fee = project.fee
+
+    if (project.id) {
+      this.id = project.id
+    }
+    this.closeProjectSidebar()
   }
 
   newPhase () {
@@ -298,8 +352,7 @@ export default class JehMaker extends Vue {
   }
 
   exportUrl () {
-    let json = { fee: this.fee, phases: this.phases }
-    this.$router.push({ name: 'phases', params: { phases: utf8ToB64(JSON.stringify(json)) } })
+    this.setUrl()
     this.url = window.location.href
     this.$copyText(this.url)
     this.openExportPopup = true
@@ -311,8 +364,7 @@ export default class JehMaker extends Vue {
 
   private importFromB64 (b64) {
     let jsonImported = JSON.parse(b64ToUtf8(b64))
-    this.fee = jsonImported.fee
-    this.phases = jsonImported.phases
+    this.loadProject(jsonImported)
   }
 
   importUrl () {
