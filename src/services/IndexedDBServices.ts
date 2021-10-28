@@ -49,7 +49,6 @@ class IndexedDBService {
     }
 
     async addProject (project) {
-      console.log('adding project', project)
       return new Promise((resolve, reject) => {
         if (!this.db) {
           return
