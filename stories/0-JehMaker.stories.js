@@ -3,6 +3,8 @@ import { withKnobs, object } from '@storybook/addon-knobs'
 import JehMaker from '../src/components/JehMaker'
 import { TauxObject } from '../src/types.ts'
 import StoryRouter from 'storybook-vue-router'
+import Vuex from 'vuex'
+import store from '../src/store'
 
 export default {
   title: 'JehMaker',
@@ -18,5 +20,6 @@ export const jehmaker = () => ({
       default: object('taux', defaultValueTaux)
     }
   },
+  store: store,
   template: ' <JehMaker :taux="t"/>'
 })

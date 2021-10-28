@@ -222,11 +222,13 @@ export default class JehMaker extends Vue {
 
   // Methods
   setUrl () {
-    this.$router.push({ name: 'phases', params: { phases: utf8ToB64(JSON.stringify(this.saveObject)) } }).catch(err => {
-      if (err.name !== 'NavigationDuplicated') {
+    try {
+      this.$router.push({ name: 'phases', params: { phases: utf8ToB64(JSON.stringify(this.saveObject)) } })
+    } catch (err) {
+      if (err && (err as Error).name !== 'NavigationDuplicated') {
         throw err
       }
-    })
+    }
   }
 
   openProjectSidebar () {
