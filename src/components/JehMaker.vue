@@ -30,10 +30,10 @@
         <input type="text" placeholder="Nom du projet" v-model="projectName">
         <div class="ui secondary button" @click="save">
           <i class="add icon"></i>
-          Add
+          Sauvegarder
         </div>
       </div>
-      <sui-button @click="openProjectSidebar">List</sui-button>
+      <sui-button @click="openProjectSidebar">Projets</sui-button>
       <ProjetsSidebar :visible="isOpenProjectSidebar" @loadProject="loadProject" @close="closeProjectSidebar"/>
       <button class="ui input positive button" @click="exportUrl">Exporter</button>
       <div class="ui action input">
