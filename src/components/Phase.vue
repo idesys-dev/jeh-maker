@@ -113,6 +113,11 @@ export default class Phase extends Vue {
     this.update('margin')
   }
 
+  @Watch('taux', { deep: true })
+  WatchTaux () {
+    this.calculate()
+  }
+
   // Methods
   update (name: string) {
     let val = this.toInt(this[name])
