@@ -6,7 +6,6 @@
         Cet outil a pour objectif de faciliter la budgétisation pour les Junior-Entreprises.
         Cet outil à pour vocation de comprendre et contrôler la structure de revenus et de coûts de sa Junior-Entreprise, notamment pour piloter la marge opérationnelle globale définie en début de mandat pour guider l'activité commerciale.
       </p>
-      <p>L'outil s'inspire du JEH Maker VBA réalisé par IÉSEG Conseil.</p>
 
       <h2>Formules clés : </h2>
       <p>
