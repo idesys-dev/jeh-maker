@@ -70,7 +70,6 @@ import MultipleSelect from './MultipleSelect.vue'
 export default class Phase extends Vue {
   // Props
   @Prop() private phase!: PhaseObject
-  @Prop() private contributions!: any
   // @Prop() private consultants!: string[]
   @Prop() private taux!: TauxObject
 
