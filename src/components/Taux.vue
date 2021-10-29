@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="value">
     <sui-button @click.native="toggle">Afficher les taux</sui-button>
     <sui-modal v-model="open">
       <sui-modal-header>Taux</sui-modal-header>
