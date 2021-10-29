@@ -251,7 +251,13 @@ export default class JehMaker extends Vue {
     this.projectName = project.projectName
     this.phases = project.phases
     this.fee = project.fee
-    this.taux = jsonImported.taux
+    this.taux = new TauxObject(
+      jsonImported.taux.urssafBase,
+      jsonImported.taux.jeContrib,
+      jsonImported.taux.jepay,
+      jsonImported.taux.consultantContrib,
+      jsonImported.taux.consultantPay
+    )
 
     if (project.id) {
       this.id = project.id
