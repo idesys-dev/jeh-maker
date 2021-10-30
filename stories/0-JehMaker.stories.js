@@ -2,7 +2,7 @@
 import { withKnobs, object } from '@storybook/addon-knobs'
 import JehMaker from '../src/components/JehMaker'
 import { TauxObject } from '../src/types.ts'
-import StoryRouter from 'storybook-vue-router'
+import StoryRouter from '../.storybook/plugins/storybook-vue-router'
 import store from '../src/store'
 
 export default {

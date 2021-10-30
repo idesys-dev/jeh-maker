@@ -63,7 +63,6 @@
     "sass-loader": "^7.3.1",
     "selenium-server": "^3.141.59",
     "storybook-chromatic": "^3.5.5",
-    "storybook-vue-router": "^1.0.7",
     "typescript": "^3.7.3",
     "vue-template-compiler": "^2.6.11"
   },
