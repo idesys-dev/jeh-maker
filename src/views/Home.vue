@@ -13,7 +13,6 @@
 </template>
 
 <script lang="ts">
-import { PhaseObject, TauxObject } from '../types'
 import { Component, Vue } from 'vue-property-decorator'
 import JehMaker from '@/components/JehMaker.vue' // @ is an alias to /src
 import Sidebar from '@/components/Sidebar.vue' // @ is an alias to /src
