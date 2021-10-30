@@ -37,7 +37,7 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
     - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v2.2.4
       with:
         # Artifact name
         name: coverage
@@ -74,7 +74,7 @@ jobs:
     - name: Build
       run: npm run build
     - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v2.2.4
       with:
         # Artifact name
         name: build
@@ -96,7 +96,7 @@ jobs:
     - name: Build
       run: npm run build-storybook
     - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v2.2.4
       with:
         # Artifact name
         name: storybook
