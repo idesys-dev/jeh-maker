@@ -1,5 +1,16 @@
 <template>
   <div>
+    <sui-button @click="openProjectSidebar" class="btn-mesprojets" basic>
+      <i class="briefcase icon"></i>
+      Mes Projets
+    </sui-button>
+    <ProjetsSidebar
+      v-model="projectName"
+      :visible="isOpenProjectSidebar"
+      @loadProject="loadProject"
+      @close="closeProjectSidebar"
+      @save="save"
+    />
     <div is="sui-container">
      <MargesDetails
         :opMargin="opMargin"
@@ -26,15 +37,6 @@
           </sui-grid-column>
         </sui-grid-row>
       </sui-grid>
-      <div class="ui right action input">
-        <input type="text" placeholder="Nom du projet" v-model="projectName">
-        <div class="ui secondary button" @click="save">
-          <i class="add icon"></i>
-          Sauvegarder
-        </div>
-      </div>
-      <sui-button @click="openProjectSidebar">Projets</sui-button>
-      <ProjetsSidebar :visible="isOpenProjectSidebar" @loadProject="loadProject" @close="closeProjectSidebar"/>
       <button class="ui input positive button" @click="exportUrl">Exporter</button>
       <div class="ui action input">
         <input type="text" v-model="urlImport" v-on:keyup.enter="importUrl" placeholder="https://">
@@ -222,13 +224,11 @@ export default class JehMaker extends Vue {
 
   // Methods
   setUrl () {
-    try {
-      this.$router.push({ name: 'phases', params: { phases: utf8ToB64(JSON.stringify(this.saveObject)) } })
-    } catch (err) {
-      if (err && (err as Error).name !== 'NavigationDuplicated') {
+    this.$router.push({ name: 'phases', params: { phases: utf8ToB64(JSON.stringify(this.saveObject)) } }).catch((err) => {
+      if (err && err.name !== 'NavigationDuplicated') {
         throw err
       }
-    }
+    })
   }
 
   openProjectSidebar () {
@@ -380,6 +380,11 @@ export default class JehMaker extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.btn-mesprojets{
+  position: absolute;
+  left: 1rem;
+  top: 2rem;
+}
 .verymini {
   width: 60px;
 }
