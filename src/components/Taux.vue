@@ -13,14 +13,9 @@
             </tr>
           </thead>
           <tbody>
-              <tr v-for="label in Object.keys(content)" v-bind:key="label">
-<<<<<<< HEAD
+              <tr v-for="label in Object.keys(value)" v-bind:key="label">
                   <td>{{description[label]}}</td>
-                  <td><sui-input class="w-100" v-model="content[label]" @input="handleInput" type="text"/></td>
-=======
-                  <td>{{label}}</td>
-                  <td><sui-input class="w-100"  v-model="content[label]" @input="handleInput" type="number"/></td>
->>>>>>> b4d972e (Save and restore taux URL)
+                  <td><sui-input class="w-100" v-model="value[label]" @input="handleInput" type="text"/></td>
               </tr>
           </tbody>
         </table>
@@ -43,7 +38,7 @@ import { TauxObject } from '../types'
 export default class Taux extends Vue {
   @Prop() value!:TauxObject
 
-  content:TauxObject = this.value
+  // Data
   open:boolean = false;
   description = {
     urssafBase: 'Base URSSAF',
@@ -53,12 +48,13 @@ export default class Taux extends Vue {
     consultantPay: 'Part Etudiant : Total des taux des cotisations indexées sur la rémunération brute'
   }
 
+  // Methods
   toggle () {
     this.open = !this.open
   }
 
   handleInput (e) {
-    this.$emit('input', this.content)
+    this.$emit('input', this.value)
   }
 }
 </script>
