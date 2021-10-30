@@ -195,11 +195,12 @@ export default class JehMaker extends Vue {
     }
   }
 
-  get saveObject () : { projectName: string, phases: PhaseObject[], fee: number } {
+  get saveObject () : { projectName: string, phases: PhaseObject[], fee: number, taux: TauxObject } {
     return {
       projectName: this.projectName,
       phases: this.phases,
-      fee: this.fee
+      fee: this.fee,
+      taux: this.taux
     }
   }
 
@@ -252,11 +253,11 @@ export default class JehMaker extends Vue {
     this.phases = project.phases
     this.fee = project.fee
     this.taux = new TauxObject(
-      jsonImported.taux.urssafBase,
-      jsonImported.taux.jeContrib,
-      jsonImported.taux.jepay,
-      jsonImported.taux.consultantContrib,
-      jsonImported.taux.consultantPay
+      project.taux.urssafBase,
+      project.taux.jeContrib,
+      project.taux.jepay,
+      project.taux.consultantContrib,
+      project.taux.consultantPay
     )
 
     if (project.id) {
