@@ -264,6 +264,7 @@ export default class JehMaker extends Vue {
       this.id = project.id
     }
     this.closeProjectSidebar()
+    this.calculate()
   }
 
   newPhase () {
@@ -381,7 +382,6 @@ export default class JehMaker extends Vue {
     let urlSplit = this.urlImport.split('/')
     if (urlSplit.length > 2 && urlSplit[urlSplit.length - 2] === 'p') {
       this.importFromB64(urlSplit[urlSplit.length - 1])
-      this.calculate()
     }
   }
 }
