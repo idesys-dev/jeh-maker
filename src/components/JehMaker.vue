@@ -145,7 +145,7 @@ import Phase from './Phase.vue'
 import Consultants from './Consultant.vue'
 import Frais from './Frais.vue'
 import ProjetsSidebar from './ProjetsSidebar.vue'
-import Taux from '@/components/Taux.vue'
+import Taux from './Taux.vue'
 import MargesDetails from './MargesDetails.vue'
 import { round, utf8ToB64, b64ToUtf8 } from '../utils'
 
