@@ -80,6 +80,7 @@ describe('JehMaker.vue', () => {
     wrapper.vm.loadProject({
       projectName: 'projet Toto',
       phases: [],
+      taux: {},
       fee: 123,
       id: 32
     })
