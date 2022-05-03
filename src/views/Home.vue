@@ -8,7 +8,7 @@
       <Taux v-model="taux" />
   </div>
     <div id="footer" class="ui inverted  footer segment">
-      Fait avec ♥ par <a href="https://idesys.org">IdéSYS</a>
+      Fait avec ♥ par <a href="https://idesys.org">IdéSYS</a> | <a href="https://www.netlify.com">This site is powered by Netlify</a>
     </div>
 </div>
 </template>
