@@ -131,11 +131,12 @@
     <div class="ui container">
       <button class="ui primary button" @click="newPhase">Nouvelle phase</button>
     </div>
+    <Taux v-model="taux" />
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 
 // import DistributionChart from './DistributionChart'
 import DistributionChart from '../chart/ReadingChart.vue'
@@ -144,16 +145,15 @@ import Phase from './Phase.vue'
 import Consultants from './Consultant.vue'
 import Frais from './Frais.vue'
 import ProjetsSidebar from './ProjetsSidebar.vue'
+import Taux from './Taux.vue'
 import MargesDetails from './MargesDetails.vue'
 import { round, utf8ToB64, b64ToUtf8 } from '../utils'
 
 @Component({
-  components: { Phase, DistributionChart, Consultants, MargesDetails, Frais, ProjetsSidebar }
+  components: { Phase, DistributionChart, Consultants, MargesDetails, Frais, Taux, ProjetsSidebar }
 })
 export default class JehMaker extends Vue {
-  @Prop({ required: true }) taux!: TauxObject;
-
-  // Data
+  taux:TauxObject = new TauxObject()
   projectName:string = '';
   phases: PhaseObject[] = []
   totalPrice:number = 0
@@ -195,11 +195,12 @@ export default class JehMaker extends Vue {
     }
   }
 
-  get saveObject () : { projectName: string, phases: PhaseObject[], fee: number } {
+  get saveObject () : { projectName: string, phases: PhaseObject[], fee: number, taux: TauxObject } {
     return {
       projectName: this.projectName,
       phases: this.phases,
-      fee: this.fee
+      fee: this.fee,
+      taux: this.taux
     }
   }
 
@@ -251,11 +252,19 @@ export default class JehMaker extends Vue {
     this.projectName = project.projectName
     this.phases = project.phases
     this.fee = project.fee
+    this.taux = new TauxObject(
+      project.taux.urssafBase,
+      project.taux.jeContrib,
+      project.taux.jepay,
+      project.taux.consultantContrib,
+      project.taux.consultantPay
+    )
 
     if (project.id) {
       this.id = project.id
     }
     this.closeProjectSidebar()
+    this.calculate()
   }
 
   newPhase () {

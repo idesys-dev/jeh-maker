@@ -70,7 +70,6 @@ import MultipleSelect from './MultipleSelect.vue'
 export default class Phase extends Vue {
   // Props
   @Prop() private phase!: PhaseObject
-  @Prop() private contributions!: any
   // @Prop() private consultants!: string[]
   @Prop() private taux!: TauxObject
 
@@ -112,6 +111,11 @@ export default class Phase extends Vue {
   @Watch('margin')
   Watchmargin () {
     this.update('margin')
+  }
+
+  @Watch('taux', { deep: true })
+  WatchTaux () {
+    this.calculate()
   }
 
   // Methods
