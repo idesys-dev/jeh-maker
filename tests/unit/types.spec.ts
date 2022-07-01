@@ -37,7 +37,6 @@ const testSetMethods = [
     },
     taux: new TauxObject(39.04, 0.30116, 0.042, 0.1605, 0)
   }
-  // TODO Add values from 2020 with updated rates
 ]
 
 describe('TauxObject', () => {

@@ -57,8 +57,6 @@ export default class Phase extends Vue {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped lang='scss'>
-.new-consultant-wrapper {
-}
 .new-consultant-wrapper * {
   margin: 6px;
 }

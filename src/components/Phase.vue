@@ -34,12 +34,11 @@
     </td>
     <td>{{ phase.marginJE | percentage }}</td>
     <td>{{ phase.urssafJE | euro }}</td>
-    <!-- <td>
+    <td>
       <multiple-select
         :options="consultants"
-        :placeholder="'Intervenant'"
       ></multiple-select>
-    </td> -->
+    </td>
     <td>
       <div class="ui verysmall input">
         <input
@@ -53,7 +52,6 @@
     <td>{{ phase.netConsultant | euro }}</td>
     <td>{{ phase.netByConsultant | euro }}</td>
     <td @click="deletePhaseEvent"><i class="icon close"></i></td>
-    <!-- <td>{{ mode }}</td> -->
   </tr>
 </template>
 
@@ -70,8 +68,6 @@ import MultipleSelect from './MultipleSelect.vue'
 export default class Phase extends Vue {
   // Props
   @Prop() private phase!: PhaseObject
-  @Prop() private contributions!: any
-  // @Prop() private consultants!: string[]
   @Prop() private taux!: TauxObject
 
   // Data
@@ -86,14 +82,9 @@ export default class Phase extends Vue {
 
   mode: string = 'price' // 'price' or 'pay' (avoid infinite loop cause by watch and calculations)
 
-  consultant: string = '';
-
   // Lifecycle hood
   mounted () {
     this.calculate()
-    // if (this.consultants.length) {
-    //   this.consultant = this.consultants[0]
-    // }
   }
 
   // Watchers
@@ -171,7 +162,6 @@ export default class Phase extends Vue {
     this.phase.netByConsultant = 0
     this.phase.pcConsultant = 0
   }
-  // toInt(strnb): [number, string] { // convert to integer and if possible then call calculate, otherwise call reset
   toInt (strnb: string): number { // convert to integer and if possible then call calculate, otherwise call reset
     let nb = parseInt(strnb)
     if (isNaN(nb)) {

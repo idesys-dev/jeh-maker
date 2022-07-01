@@ -52,7 +52,7 @@ export default class Taux extends Vue {
     this.open = !this.open
   }
 
-  handleInput (e) {
+  handleInput () {
     this.$emit('input', this.content)
   }
 }

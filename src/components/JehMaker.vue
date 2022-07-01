@@ -25,12 +25,12 @@
               <Frais v-model="fee" :totalPrice="totalPrice"/>
           </sui-grid-column>
           <sui-grid-column>
-            <!-- <consultants
+            <consultants
               @newConsultant="onNewConsultant"
               @removeConsultant="onRemoveConsultant"
               :consultants="consultants"
               >
-            </consultants> -->
+            </consultants>
           </sui-grid-column>
           <sui-grid-column>
               <DistributionChart :chartData="chartData"></DistributionChart>
@@ -59,7 +59,6 @@
     </div>
     <div class="ui fluid container scrollable">
       <table class="ui small celled table">
-      <!-- <table class="cell"> -->
         <thead>
           <tr class="center aligned">
             <th></th>
@@ -68,7 +67,7 @@
             <th colspan="2" class="center aligned">JEH</th>
             <th colspan="2"></th>
             <th colspan="2" class="center aligned">Part JE</th>
-            <th colspan="4" class="center aligned">Part intervenant(s)</th> <!-- todo: s que si plusieurs intervenants -->
+            <th colspan="4" class="center aligned">Part intervenant</th>
             <th></th>
           </tr>
           <tr class="center aligned">
@@ -86,7 +85,7 @@
               <!-- <p class="bold-normal">Moyenne : {{ averageMarginJe | percentage }}</p> -->
             </th>
             <th>URSSAF</th>
-            <!-- <th>Intervenants</th> -->
+            <th>Intervenants</th>
             <th>Rémunération</th>
             <th>URSSAF</th>
             <th>net</th>
@@ -118,7 +117,7 @@
             <th></th>
             <th></th>
             <th>{{ totalUrssafJe | euro }}</th>
-            <!-- <th></th> -->
+            <th></th>
             <th>{{ totalPay | euro }}</th>
             <th>{{ totalUrssafConsultant | euro }}</th>
             <th>{{ totalNetConsultant | euro }}</th>
@@ -137,7 +136,6 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 
-// import DistributionChart from './DistributionChart'
 import DistributionChart from '../chart/ReadingChart.vue'
 import { PhaseObject, TauxObject } from '../types'
 import Phase from './Phase.vue'
